@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
     companion object {
         // Used to load the 'cpp' library on application startup.
         init {
-            System.loadLibrary("myapps")
+            System.loadLibrary("basic")
         }
     }
 }
