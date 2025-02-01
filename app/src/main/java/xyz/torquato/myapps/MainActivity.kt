@@ -7,24 +7,26 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.mywaves.ui.views.FrequencySelector
+import xyz.torquato.myapps.data.waves.SoundRepository
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
 
 class MainActivity : ComponentActivity() {
+    private val soundRepository = SoundRepository()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        soundRepository.start()
         enableEdgeToEdge()
         setContent {
             MyAppsTheme {
-                FrequencySelector()
+                FrequencySelector(soundRepository::setTouchEvent)
             }
         }
     }
 
-    companion object {
-        // Used to load the 'cpp' library on application startup.
-        init {
-            System.loadLibrary("waves")
-        }
+    override fun onDestroy() {
+        soundRepository.destroy()
+        super.onDestroy()
     }
 }
 
