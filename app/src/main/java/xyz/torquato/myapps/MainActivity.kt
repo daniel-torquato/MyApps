@@ -20,12 +20,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private external fun entry(): String
-
     companion object {
         // Used to load the 'cpp' library on application startup.
         init {
-            System.loadLibrary("basic")
             System.loadLibrary("waves")
         }
     }
