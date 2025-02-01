@@ -21,11 +21,20 @@ class MainActivity : ComponentActivity() {
             MyAppsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = entry(),
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
+        }
+    }
+
+    private external fun entry(): String
+
+    companion object {
+        // Used to load the 'cpp' library on application startup.
+        init {
+            System.loadLibrary("myapps")
         }
     }
 }
