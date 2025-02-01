@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
         // Used to load the 'cpp' library on application startup.
         init {
             System.loadLibrary("basic")
+            System.loadLibrary("waves")
         }
     }
 }
