@@ -1,4 +1,4 @@
-package xyz.torquato.myapps
+package xyz.torquato.myapps.ui.activities
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,7 +10,7 @@ import com.example.mywaves.ui.views.FrequencySelector
 import xyz.torquato.myapps.data.waves.SoundRepository
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
 
-class MainActivity : ComponentActivity() {
+class MusicActivity : ComponentActivity() {
     private val soundRepository = SoundRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
