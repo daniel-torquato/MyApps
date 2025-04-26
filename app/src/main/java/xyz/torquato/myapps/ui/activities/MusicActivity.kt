@@ -3,12 +3,11 @@ package xyz.torquato.myapps.ui.activities
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.mywaves.ui.views.FrequencySelector
 import xyz.torquato.myapps.data.waves.SoundRepository
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
+import xyz.torquato.myapps.ui.views.FrequencySelector
 
 class MusicActivity : ComponentActivity() {
     private val soundRepository = SoundRepository()
@@ -16,7 +15,6 @@ class MusicActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         soundRepository.start()
-        enableEdgeToEdge()
         setContent {
             MyAppsTheme {
                 FrequencySelector(soundRepository::setTouchEvent)
@@ -34,6 +32,6 @@ class MusicActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     MyAppsTheme {
-        FrequencySelector {_, _, _ -> }
+        FrequencySelector { _, _, _ -> }
     }
 }

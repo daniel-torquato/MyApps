@@ -1,4 +1,4 @@
-package com.example.mywaves.ui.views
+package xyz.torquato.myapps.ui.views
 
 import android.annotation.SuppressLint
 import android.view.MotionEvent
@@ -40,7 +40,7 @@ fun FrequencySelector(
             .padding(40.dp),
         color = Color.Green
     ) {
-        Column() {
+        Column {
             RangeSlider(
                 value = sliderPosition,
                 onValueChange = { sliderPosition = it },
