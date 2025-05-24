@@ -16,13 +16,26 @@
             android:theme="@style/Theme.MyApps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".ui.activities.EngineActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MyGames">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="myengine" />
+        </activity>
+
+        <activity
+            android:name=".MenuActivity"
             android:exported="true"
             android:theme="@style/Theme.MyGames">
             <intent-filter>

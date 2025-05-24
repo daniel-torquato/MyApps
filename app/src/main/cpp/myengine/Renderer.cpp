@@ -64,14 +64,14 @@ void Renderer::enableTexture(const Object &it) {
             case DIFFUSE: {
                 auto diffuseId = int{index};
                 std::string uniformName = "uMaterial.diffuse[" + std::to_string(diffuseIndex++) + "]";
-                aout << "Texture: " << uniformName << std::endl;
+                //aout << "Texture: " << uniformName << std::endl;
                 setUniform(uniformName, &diffuseId);
             }
                 break;
             case SPECULAR: {
                 auto specularId = int{index};
                 std::string uniformName = "uMaterial.specular[" + std::to_string(specularIndex++) + "]";
-                aout << "Texture: " << uniformName << std::endl;
+                //aout << "Texture: " << uniformName << std::endl;
                 setUniform(uniformName, &specularId);
             }
                 break;

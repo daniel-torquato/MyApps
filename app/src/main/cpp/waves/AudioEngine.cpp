@@ -7,10 +7,10 @@
 #include <mutex>
 
 // Double-buffering offers a good tradeoff between latency and protection against glitches.
-constexpr int32_t kBufferSizeInBursts = 2;
+constexpr int32_t kBufferSizeInBursts = 3;
 
 aaudio_data_callback_result_t dataCallback(
-        AAudioStream *,
+        AAudioStream *stream,
         void *userData,
         void *audioData,
         int32_t numFrames) {
@@ -33,6 +33,9 @@ bool AudioEngine::start() {
     AAudio_createStreamBuilder(&streamBuilder);
     AAudioStreamBuilder_setFormat(streamBuilder, AAUDIO_FORMAT_PCM_FLOAT);
     AAudioStreamBuilder_setChannelCount(streamBuilder, 1);
+    AAudioStreamBuilder_setSampleRate(streamBuilder, 44100);
+    AAudioStreamBuilder_setSharingMode(streamBuilder, AAUDIO_SHARING_MODE_EXCLUSIVE);
+   // AAudioStreamBuilder_setSamplesPerFrame(streamBuilder, 100);
     AAudioStreamBuilder_setPerformanceMode(streamBuilder, AAUDIO_PERFORMANCE_MODE_LOW_LATENCY);
     AAudioStreamBuilder_setDataCallback(streamBuilder, ::dataCallback, &oscillator_);
     AAudioStreamBuilder_setErrorCallback(streamBuilder, ::errorCallback, this);
@@ -47,7 +50,10 @@ bool AudioEngine::start() {
 
     // Retrieves the sample rate of the stream for our oscillator.
     int32_t sampleRate = AAudioStream_getSampleRate(stream_);
+    __android_log_print(ANDROID_LOG_ERROR, "AudioEngine", "Sample Rate is %d",
+                       sampleRate);
     oscillator_.setSampleRate(sampleRate);
+
 
     // Sets the buffer size.
     AAudioStream_setBufferSizeInFrames(
@@ -60,6 +66,7 @@ bool AudioEngine::start() {
                             AAudio_convertResultToText(result));
         return false;
     }
+
 
     AAudioStreamBuilder_delete(streamBuilder);
     return true;

@@ -1,9 +1,16 @@
 package xyz.torquato.myapps.ui.activities
 
+import android.os.Bundle
 import android.view.View
 import com.google.androidgamesdk.GameActivity
 
 class EngineActivity : GameActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        println("MyTag: Created")
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {

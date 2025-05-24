@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 @SuppressLint("ReturnFromAwaitPointerEventScope")
 @Composable
 fun FrequencySelector(
-    onTouch: (action: Int, frequency: Float, amplitude: Float) -> Unit = {_, _, _ -> }
+    onTouch: (action: Int, frequency: Float, amplitude: Float) -> Unit = {_, _, _ -> },
 ) {
     // A surface container using the 'background' color from the theme
     var log by remember { mutableStateOf("") }

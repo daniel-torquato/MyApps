@@ -1,6 +1,7 @@
 package xyz.torquato.myapps.ui.activities
 
 import android.os.Bundle
+import android.window.OnBackInvokedDispatcher
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
@@ -12,14 +13,26 @@ import xyz.torquato.myapps.ui.views.FrequencySelector
 class MusicActivity : ComponentActivity() {
     private val soundRepository = SoundRepository()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        println("MyTag: Music Mixer Created")
         soundRepository.start()
         setContent {
             MyAppsTheme {
-                FrequencySelector(soundRepository::setTouchEvent)
+                FrequencySelector(::onTouchEvent)
             }
         }
+    }
+
+    private fun onTouchEvent(action: Int, frequency: Float, amplitude: Float) {
+        println("MyTag: action=$action, frequency=$frequency, amplitude=$amplitude")
+        soundRepository.setTouchEvent(action, frequency, amplitude)
+    }
+
+    override fun getOnBackInvokedDispatcher(): OnBackInvokedDispatcher {
+        println("MyTag Back Pressed")
+        return super.getOnBackInvokedDispatcher()
     }
 
     override fun onDestroy() {
