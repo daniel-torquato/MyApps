@@ -1,7 +1,9 @@
 package xyz.torquato.myapps.ui.activities
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import android.window.OnBackInvokedDispatcher
 import com.google.androidgamesdk.GameActivity
 
 class EngineActivity : GameActivity() {
@@ -16,6 +18,17 @@ class EngineActivity : GameActivity() {
         if (hasFocus) {
             hideSystemUi()
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (event?.keyCode == KeyEvent.KEYCODE_BACK)
+            finish()
+        return super.onKeyDown(keyCode, event)
+    }
+
+    override fun getOnBackInvokedDispatcher(): OnBackInvokedDispatcher {
+        println("MyTag: Back button on engine ")
+        return super.getOnBackInvokedDispatcher()
     }
 
     private fun hideSystemUi() {
