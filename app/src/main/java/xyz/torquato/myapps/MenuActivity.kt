@@ -4,10 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -101,20 +112,52 @@ fun Menu(
     onMixerSelected: () -> Unit,
     onGameSelected: () -> Unit
 ) {
-    Column(
-        modifier = Modifier.padding(30.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Button(onClick = onGameSelected, shape = RectangleShape) {
-                Text("Open Game", color = Color.Red)
-            }
-            Button(onClick = onMixerSelected, shape = RectangleShape) {
-                Text("Frequency Mixer", color = Color.Blue)
-            }
+  //  Column(
+  //      modifier = Modifier.fillMaxSize().padding(30.dp),
+  //      horizontalAlignment = Alignment.CenterHorizontally
+  //  ) {
+  //      Row(
+  //          modifier = Modifier.fillMaxSize(),
+  //          verticalAlignment = Alignment.CenterVertically
+  //      ) {
+  //          Button(onClick = onGameSelected, shape = RectangleShape) {
+  //              Text("Open Game", color = Color.Red)
+  //          }
+  //          Button(onClick = onMixerSelected, shape = RectangleShape) {
+  //              Text("Frequency Mixer", color = Color.Blue)
+  //          }
+//
+  //      }
+  //  }
 
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement =  Arrangement.Center,
+        contentPadding = PaddingValues(50.dp),
+    ) {
+        item {
+            Button(
+                onClick = onGameSelected,
+                modifier = Modifier.size(100.dp),
+                contentPadding = PaddingValues(10.dp),
+                elevation = ButtonDefaults.buttonElevation(10.dp),
+                shape = RoundedCornerShape(20)
+            ) {
+                Text("Game", color = Color.Red)
+            }
+        }
+        item {
+            Button(
+                onClick = onMixerSelected,
+                modifier = Modifier.size(100.dp),
+                contentPadding = PaddingValues(10.dp),
+                elevation = ButtonDefaults.buttonElevation(10.dp),
+                shape = RoundedCornerShape(20)
+            ) {
+                Text("Mixer", color = Color.Blue)
+            }
         }
     }
 }
