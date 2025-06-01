@@ -6,6 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.room.Room
+import xyz.torquato.myapps.data.track.datasource.TrackDatabase
 import xyz.torquato.myapps.data.waves.SoundRepository
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
 import xyz.torquato.myapps.ui.views.FrequencySelector
@@ -16,6 +18,13 @@ class MusicActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // TODO(Add insert with complete salved points)
+        // val db = Room.databaseBuilder(
+        //    applicationContext,
+        //    TrackDatabase::class.java, "raw-tracks"
+        //).build()
+
         println("MyTag: Music Mixer Created")
         soundRepository.start()
         setContent {

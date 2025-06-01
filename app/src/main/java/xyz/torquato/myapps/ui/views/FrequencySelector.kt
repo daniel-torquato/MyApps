@@ -49,10 +49,9 @@ val CUSTOM_SHADER = """
     uniform float2 resolution;
     uniform float2 center;
     uniform float start;
-    //uniform float end;
     
     half4 main(in float2 fragCoord) {
-         float maxDimension = max(resolution.x, resolution.y);
+        float maxDimension = max(resolution.x, resolution.y);
         float2 uv = fragCoord/maxDimension;
         
         float factor = 0;
@@ -97,7 +96,7 @@ fun FrequencySelector(
     val shaderBrush = ShaderBrush(shader = shader)
 
     LaunchedEffect(isRecording) {
-        println("MyTag: Example ${isRecording}")
+        println("MyTag: Example $isRecording")
     }
 
     LaunchedEffect(points) {

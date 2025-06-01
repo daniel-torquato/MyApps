@@ -32,7 +32,9 @@ import androidx.navigation.activity
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
+import androidx.room.Room
 import kotlinx.serialization.Serializable
+import xyz.torquato.myapps.data.track.datasource.TrackDatabase
 import xyz.torquato.myapps.ui.activities.EngineActivity
 import xyz.torquato.myapps.ui.activities.MusicActivity
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
@@ -60,6 +62,9 @@ sealed interface ScreenRoute {
 class MenuActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+
         enableEdgeToEdge()
         setContent {
             MyAppsTheme {
