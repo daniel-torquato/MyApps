@@ -13,34 +13,42 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.RangeSlider
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.intellij.lang.annotations.Language
+import xyz.torquato.myapps.R
+import xyz.torquato.myapps.ui.views.model.InputTouch
 
 @Language("AGSL")
 val CUSTOM_SHADER = """
@@ -67,24 +75,27 @@ val CUSTOM_SHADER = """
     }
 """.trimIndent()
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("ReturnFromAwaitPointerEventScope")
 @Composable
 fun FrequencySelector(
-    onTouch: (action: Int, frequency: Float, amplitude: Float) -> Unit = {_, _, _ -> },
+    onTouch: (action: Int, frequency: Float, amplitude: Float) -> Unit = { _, _, _ -> },
 ) {
     // A surface container using the 'background' color from the theme
     var log by remember { mutableStateOf("") }
     var input by remember { mutableIntStateOf(MotionEvent.ACTION_DOWN) }
     var size by remember { mutableStateOf(IntSize.Zero) }
     var color by remember { mutableStateOf(Color.Blue) }
-    var sliderPosition by remember { mutableStateOf(20f .. 20000f) }
-    var points by remember { mutableStateOf(emptyList<Offset>()) }
+    var sliderPosition by remember { mutableStateOf(20f..20000f) }
+    var points by remember { mutableStateOf(InputTouch.Zero) }
 
     var isRecording by remember { mutableStateOf(false) }
-    var isSalving by remember { mutableStateOf(false) }
+    var isSaving by remember { mutableStateOf(false) }
     var isPlaying by remember { mutableStateOf(false) }
-    var selectedPoints by remember { mutableStateOf(emptyList<Offset>()) }
-    var salvedPoints by remember { mutableStateOf(emptyList<List<Offset>>()) }
+
+    var tmpPoints by remember { mutableStateOf(InputTouch.Zero) }
+
+    var salvedPoints by remember { mutableStateOf(emptyList<InputTouch>()) }
 
     var enabled by remember { mutableStateOf(false) }
     val animatedAlpha: Float by animateFloatAsState(
@@ -99,40 +110,35 @@ fun FrequencySelector(
         println("MyTag: Example $isRecording")
     }
 
+
     LaunchedEffect(points) {
         if (isRecording) {
-            selectedPoints = points
+            tmpPoints = points
             isRecording = false
             println("MyTag: Points $points")
         }
     }
 
-    LaunchedEffect(selectedPoints) {
-        if (selectedPoints.isNotEmpty()) {
-            println("MyTag: SALVED $selectedPoints")
-        }
-    }
+    LaunchedEffect(isSaving) {
+        if (isSaving) {
+            val oldPoints = salvedPoints.toMutableList()
+            oldPoints += tmpPoints
+            salvedPoints = oldPoints.toList()
 
-    LaunchedEffect(isSalving) {
-        if (isSalving) {
-            val buffer = salvedPoints.toMutableList()
-            val newItems = selectedPoints.toMutableList()
-            buffer += newItems
-            salvedPoints = buffer.toList()
-            isSalving = false
+            isSaving = false
         }
     }
 
     LaunchedEffect(isPlaying) {
         if (isPlaying) {
-            salvedPoints.forEach { notes ->
-                notes.forEach { tone ->
+            salvedPoints.forEach { inputTouch ->
+                inputTouch.touchList.forEach { touch ->
                     val freq =
-                        (tone.y / size.height) * (sliderPosition.endInclusive - sliderPosition.start) + sliderPosition.start
-                    val amplitude = (tone.x / size.width)
-                    onTouch(0, freq, amplitude)
-                    delay(300L)
+                        (touch.x / inputTouch.size.height) * (inputTouch.scale.endInclusive - inputTouch.scale.start) + inputTouch.scale.start
+                    val ampl = (touch.y / inputTouch.size.width)
+                    onTouch(0, freq, ampl)
                 }
+                delay(300L)
                 onTouch(1, 0.0f, 0.0f)
             }
             isPlaying = false
@@ -147,7 +153,7 @@ fun FrequencySelector(
                 value = sliderPosition,
                 onValueChange = { sliderPosition = it },
                 enabled = true,
-                valueRange = 20f .. 20000f
+                valueRange = 20f..20000f
             )
             Box(
                 modifier = Modifier
@@ -161,11 +167,11 @@ fun FrequencySelector(
                             size.width.toFloat(),
                             size.height.toFloat()
                         )
-                        if (points.isNotEmpty()) {
+                        if (points.touchList.isNotEmpty()) {
                             shader.setFloatUniform(
                                 "center",
-                                points.first().x.toFloat(),
-                                points.first().y.toFloat()
+                                points.touchList.first().x.toFloat(),
+                                points.touchList.first().y.toFloat()
                             )
                         } else {
                             shader.setFloatUniform("center", 0.0f, 0.0f)
@@ -178,7 +184,11 @@ fun FrequencySelector(
                             while (true) {
                                 val event = awaitPointerEvent()
                                 val offset = event.changes.first().position
-                                points = event.changes.map { it.position }
+                                points = InputTouch(
+                                    size = size,
+                                    touchList = event.changes.map { it.position },
+                                    scale = sliderPosition.start.toInt()..sliderPosition.endInclusive.toInt()
+                                )
                                 val freq =
                                     (offset.y / size.height) * (sliderPosition.endInclusive - sliderPosition.start) + sliderPosition.start
                                 val amplitude = (offset.x / size.width)
@@ -205,10 +215,7 @@ fun FrequencySelector(
                                     else -> MotionEvent.ACTION_CANCEL
                                 }
 
-                                if (input == MotionEvent.ACTION_DOWN)
-                                    enabled = true
-                                else
-                                    enabled = false
+                                enabled = input == MotionEvent.ACTION_DOWN
 
                                 color =
                                     if ((0 < offset.x && offset.x < size.width) and (0 < offset.y && offset.y < size.height))
@@ -239,9 +246,7 @@ fun FrequencySelector(
             ) {
                 Row {
                     Button(
-                        modifier = Modifier
-                            .width(40.dp)
-                            .aspectRatio(1f),
+                        modifier = Modifier,
                         onClick = {
                             isRecording = true
                         },
@@ -251,26 +256,22 @@ fun FrequencySelector(
                             disabledContainerColor = Color.Red,
                             disabledContentColor = Color.Red
                         )
-                    ) {}
+                    ) { Text("Record", color = Color.Black) }
                     Button(
-                        modifier = Modifier
-                            .width(40.dp)
-                            .aspectRatio(1f),
+                        modifier = Modifier,
                         onClick = {
-                            isSalving = true
+                            isSaving = true
                         },
                         colors = ButtonColors(
                             contentColor = Color.Transparent,
-                            containerColor = if (isSalving) Color.Red else Color.Green,
+                            containerColor = if (isSaving) Color.Red else Color.Green,
                             disabledContainerColor = Color.Red,
                             disabledContentColor = Color.Red
                         )
-                    ) {}
+                    ) { Text("Save", color = Color.Black) }
 
                     Button(
-                        modifier = Modifier
-                            .width(40.dp)
-                            .aspectRatio(1f),
+                        modifier = Modifier,
                         onClick = {
                             isPlaying = true
                         },
@@ -280,17 +281,19 @@ fun FrequencySelector(
                             disabledContainerColor = Color.Red,
                             disabledContentColor = Color.Red
                         )
-                    ) {}
+                    ) { Text("Play", color = Color.Black) }
                 }
                 LazyRow(
                     modifier = Modifier.padding(10.dp)
                 ) {
-                    items(selectedPoints.size) { index ->
-                        val red = selectedPoints[index].x / size.width
-                        val green = selectedPoints[index].y / size.height
-                        Box(modifier = Modifier
-                            .size(40.dp)
-                            .background(Color(red, green, 0.0f, 1.0f)))
+                    items(tmpPoints.touchList.size) { index ->
+                        val red = (tmpPoints.touchList[index].x / tmpPoints.size.width).toFloat()
+                        val green = (tmpPoints.touchList[index].y / tmpPoints.size.height).toFloat()
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(Color(red, green, 0.0f, 1.0f))
+                        )
                     }
                 }
 
@@ -306,15 +309,45 @@ fun FrequencySelector(
                                 .border(1.dp, Color.Red),
                             contentPadding = PaddingValues(5.dp)
                         ) {
-                            items(salvedPoints[index].size) { subIndex ->
-                                val red = salvedPoints[index][subIndex].x / size.width
-                                val green = salvedPoints[index][subIndex].y / size.height
-                                Box(
+                            items(salvedPoints[index].touchList.size) { subIndex ->
+                                val red =
+                                    (salvedPoints[index].touchList[subIndex].x / salvedPoints[index].size.width).toFloat()
+                                val green =
+                                    (salvedPoints[index].touchList[subIndex].y / salvedPoints[index].size.height).toFloat()
+
+                                Button(
                                     modifier = Modifier
-                                        .size(40.dp)
-                                        .background(Color(red, green, 0.0f, 1.0f))
-                                )
+                                        .padding(5.dp)
+                                        .size(40.dp),
+                                    colors = ButtonColors(
+                                        containerColor = Color(red, green, 0.0f, 1.0f),
+                                        contentColor = Color(red, green, 0.0f, 1.0f),
+                                        disabledContainerColor = Color.Transparent,
+                                        disabledContentColor = Color.Transparent
+                                    ),
+                                    onClick = {}
+                                ) {}
                             }
+                            item {
+                                AddButton { isRecording = true }
+                            }
+                        }
+                        Row {
+                            var slider by remember { mutableFloatStateOf(0.5f) }
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth(0.3f)
+                                    .padding(10.dp)
+                                    .height(30.dp),
+                                text = "${slider / (1 - slider)}"
+                            )
+                            Slider(
+                                modifier = Modifier.fillMaxWidth(1f),
+                                value = slider,
+                                onValueChange = { slider = it },
+                                enabled = true,
+                                valueRange = 0f..1f
+                            )
                         }
                     }
                 }
@@ -322,4 +355,27 @@ fun FrequencySelector(
         }
     }
 }
+
+@Composable
+fun AddButton(
+    onClick: () -> Unit
+) {
+    IconButton(
+        modifier = Modifier
+            .padding(5.dp)
+            .size(40.dp)
+            .background(Color(0.0f, 0.4f, 0.7f, 0.6f)),
+        onClick = onClick
+    ) {
+        Icon(
+            modifier = Modifier
+                .padding(5.dp)
+                .size(40.dp),
+            painter = painterResource(R.drawable.add),
+            contentDescription = null
+        )
+    }
+}
+
+
 
