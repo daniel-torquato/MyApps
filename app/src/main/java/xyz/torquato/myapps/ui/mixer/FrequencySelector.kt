@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -45,7 +46,9 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.intellij.lang.annotations.Language
 import xyz.torquato.myapps.ui.components.AddButton
+import xyz.torquato.myapps.ui.components.TextButton
 import xyz.torquato.myapps.ui.mixer.model.InputTouch
+import xyz.torquato.myapps.ui.mixer.model.Note
 
 @Language("AGSL")
 val CUSTOM_SHADER = """
@@ -82,11 +85,11 @@ fun FrequencySelector(
     var log by remember { mutableStateOf("") }
     var input by remember { mutableIntStateOf(MotionEvent.ACTION_DOWN) }
     var size by remember { mutableStateOf(IntSize.Zero) }
-    var color by remember { mutableStateOf(Color.Blue) }
     var sliderPosition by remember { mutableStateOf(20f..20000f) }
     var points by remember { mutableStateOf(InputTouch.Companion.Zero) }
 
     var isRecording by remember { mutableStateOf(false) }
+    var recordingTrack by remember { mutableIntStateOf(0) }
     var isSaving by remember { mutableStateOf(false) }
     var isPlaying by remember { mutableStateOf(false) }
 
@@ -103,14 +106,13 @@ fun FrequencySelector(
     val shader = RuntimeShader(CUSTOM_SHADER)
     val shaderBrush = ShaderBrush(shader = shader)
 
-    LaunchedEffect(isRecording) {
-        println("MyTag: Example $isRecording")
-    }
-
 
     LaunchedEffect(points) {
         if (isRecording) {
             tmpPoints = points
+            if (recordingTrack >= 0) {
+                println("MyTag: Get Track $recordingTrack")
+            }
             isRecording = false
             println("MyTag: Points $points")
         }
@@ -214,18 +216,7 @@ fun FrequencySelector(
 
                                 enabled = input == MotionEvent.ACTION_DOWN
 
-                                color =
-                                    if ((0 < offset.x && offset.x < size.width) and (0 < offset.y && offset.y < size.height))
-                                        Color.hsv(
-                                            360 * (offset.y / size.height),
-                                            (offset.x / size.width),
-                                            1f,
-                                            1f
-                                        )
-                                    else
-                                        Color.Black
-
-                                if (input == 0)
+                                if (enabled)
                                     viewModel.add(freq, amplitude)
                                 else
                                     viewModel.reset()
@@ -240,44 +231,25 @@ fun FrequencySelector(
                     .onSizeChanged { size = it }
                     .background(Color.Blue)
             ) {
-                Row {
-                    Button(
-                        modifier = Modifier,
-                        onClick = {
-                            isRecording = true
-                        },
-                        colors = ButtonColors(
-                            contentColor = Color.Transparent,
-                            containerColor = if (isRecording) Color.Red else Color.Green,
-                            disabledContainerColor = Color.Red,
-                            disabledContentColor = Color.Red
-                        )
-                    ) { Text("Record", color = Color.Black) }
-                    Button(
-                        modifier = Modifier,
-                        onClick = {
-                            isSaving = true
-                        },
-                        colors = ButtonColors(
-                            contentColor = Color.Transparent,
-                            containerColor = if (isSaving) Color.Red else Color.Green,
-                            disabledContainerColor = Color.Red,
-                            disabledContentColor = Color.Red
-                        )
-                    ) { Text("Save", color = Color.Black) }
-
-                    Button(
-                        modifier = Modifier,
-                        onClick = {
-                            isPlaying = true
-                        },
-                        colors = ButtonColors(
-                            contentColor = Color.Transparent,
-                            containerColor = if (isPlaying) Color.Blue else Color.Green,
-                            disabledContainerColor = Color.Red,
-                            disabledContentColor = Color.Red
-                        )
-                    ) { Text("Play", color = Color.Black) }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    TextButton(
+                        onClick = { isRecording = true },
+                        containerColor = if (isRecording) Color.Red else Color.Green,
+                        text = "Record"
+                    )
+                    TextButton(
+                        onClick = { isSaving = true },
+                        containerColor = if (isSaving) Color.Red else Color.Green,
+                        text = "Save"
+                    )
+                    TextButton(
+                        onClick = { isPlaying = true },
+                        containerColor = if (isPlaying) Color.Blue else Color.Green,
+                        text = "Play"
+                    )
                 }
                 LazyRow(
                     modifier = Modifier.padding(10.dp)
@@ -325,7 +297,10 @@ fun FrequencySelector(
                                 ) {}
                             }
                             item {
-                                AddButton { isRecording = true }
+                                AddButton {
+                                    isRecording = true
+                                    recordingTrack = index
+                                }
                             }
                         }
                         Row {
