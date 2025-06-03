@@ -1,26 +1,31 @@
 package xyz.torquato.myapps.data.waves
 
-class SoundRepository(
-    libraryName: String = "waves"
-) {
+import xyz.torquato.myapps.api.sound.ISoundRepository
+import javax.inject.Inject
+
+class SoundRepository @Inject constructor() : ISoundRepository {
 
     private external fun touchEvent(action: Int, frequency: Float, amplitude: Float)
     private external fun startEngine()
     private external fun stopEngine()
 
     init {
-        System.loadLibrary(libraryName)
+        System.loadLibrary(LIB_NAME)
     }
 
-    fun setTouchEvent(action: Int, frequency: Float, amplitude: Float) {
+    override fun setTouchEvent(action: Int, frequency: Float, amplitude: Float) {
         touchEvent(action, frequency, amplitude)
     }
 
-    fun start() {
+    override fun start() {
         startEngine()
     }
 
-    fun destroy() {
+    override fun destroy() {
         stopEngine()
+    }
+
+    companion object {
+        const val LIB_NAME: String = "waves"
     }
 }

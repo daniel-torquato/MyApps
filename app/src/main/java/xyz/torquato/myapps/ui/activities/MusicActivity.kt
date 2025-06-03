@@ -8,30 +8,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.room.Room
 import dagger.hilt.android.AndroidEntryPoint
+import xyz.torquato.myapps.api.sound.ISoundRepository
 import xyz.torquato.myapps.data.track.datasource.TrackDatabase
 import xyz.torquato.myapps.data.waves.SoundRepository
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
 import xyz.torquato.myapps.ui.views.FrequencySelector
+import xyz.torquato.myapps.ui.views.MixerViewModel
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MusicActivity : ComponentActivity() {
-    private val soundRepository = SoundRepository()
 
+    @Inject
+    lateinit var soundRepository: ISoundRepository
+
+    @Inject
+    lateinit var viewMode: MixerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // TODO(Add insert with complete salved points)
-        // val db = Room.databaseBuilder(
-        //    applicationContext,
-        //    TrackDatabase::class.java, "raw-tracks"
-        //).build()
-
         println("MyTag: Music Mixer Created")
         soundRepository.start()
         setContent {
             MyAppsTheme {
-                FrequencySelector(::onTouchEvent)
+                FrequencySelector(viewModel = viewMode, onTouch = ::onTouchEvent)
             }
         }
     }
@@ -56,6 +56,6 @@ class MusicActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     MyAppsTheme {
-        FrequencySelector { _, _, _ -> }
+        //FrequencySelector { _, _, _ -> }
     }
 }

@@ -45,6 +45,8 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import org.intellij.lang.annotations.Language
 import xyz.torquato.myapps.R
@@ -79,6 +81,7 @@ val CUSTOM_SHADER = """
 @SuppressLint("ReturnFromAwaitPointerEventScope")
 @Composable
 fun FrequencySelector(
+    viewModel: MixerViewModel,
     onTouch: (action: Int, frequency: Float, amplitude: Float) -> Unit = { _, _, _ -> },
 ) {
     // A surface container using the 'background' color from the theme
@@ -136,10 +139,10 @@ fun FrequencySelector(
                     val freq =
                         (touch.x / inputTouch.size.height) * (inputTouch.scale.endInclusive - inputTouch.scale.start) + inputTouch.scale.start
                     val ampl = (touch.y / inputTouch.size.width)
-                    onTouch(0, freq, ampl)
+                    viewModel.add(freq, ampl)
                 }
                 delay(300L)
-                onTouch(1, 0.0f, 0.0f)
+                viewModel.reset()
             }
             isPlaying = false
         }
@@ -228,11 +231,10 @@ fun FrequencySelector(
                                     else
                                         Color.Black
 
-                                onTouch(
-                                    input,
-                                    freq,
-                                    amplitude
-                                )
+                                if (input == 0)
+                                    viewModel.add(freq, amplitude)
+                                else
+                                    viewModel.reset()
                             }
                         }
                     },

@@ -63,9 +63,6 @@ sealed interface ScreenRoute {
 class MenuActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
         enableEdgeToEdge()
         setContent {
             MyAppsTheme {
@@ -173,6 +170,6 @@ fun Menu(
 @Composable
 fun GreetingPreview() {
     MyAppsTheme {
-        FrequencySelector { _, _, _ -> }
+       // FrequencySelector { _, _, _ -> }
     }
 }
