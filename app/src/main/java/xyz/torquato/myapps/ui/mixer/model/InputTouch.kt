@@ -11,9 +11,9 @@ data class InputTouch (
 ) {
     companion object {
         val Zero = InputTouch(
-            IntSize.Zero,
-            emptyList(),
-            IntRange.EMPTY
+            size = IntSize.Zero,
+            touchList = emptyList(),
+            scale = IntRange.EMPTY
         )
     }
 }
