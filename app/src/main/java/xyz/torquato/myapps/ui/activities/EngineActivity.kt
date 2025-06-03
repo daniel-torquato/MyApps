@@ -5,7 +5,9 @@ import android.view.KeyEvent
 import android.view.View
 import android.window.OnBackInvokedDispatcher
 import com.google.androidgamesdk.GameActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EngineActivity : GameActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

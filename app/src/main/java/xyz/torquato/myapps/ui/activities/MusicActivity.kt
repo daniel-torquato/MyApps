@@ -7,11 +7,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.room.Room
+import dagger.hilt.android.AndroidEntryPoint
 import xyz.torquato.myapps.data.track.datasource.TrackDatabase
 import xyz.torquato.myapps.data.waves.SoundRepository
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
 import xyz.torquato.myapps.ui.views.FrequencySelector
 
+@AndroidEntryPoint
 class MusicActivity : ComponentActivity() {
     private val soundRepository = SoundRepository()
 
