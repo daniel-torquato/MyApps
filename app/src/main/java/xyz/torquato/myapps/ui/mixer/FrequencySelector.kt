@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.ui.views
+package xyz.torquato.myapps.ui.mixer
 
 import android.annotation.SuppressLint
 import android.graphics.RuntimeShader
@@ -21,8 +21,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
@@ -42,15 +40,12 @@ import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import org.intellij.lang.annotations.Language
-import xyz.torquato.myapps.R
-import xyz.torquato.myapps.ui.views.model.InputTouch
+import xyz.torquato.myapps.ui.components.AddButton
+import xyz.torquato.myapps.ui.mixer.model.InputTouch
 
 @Language("AGSL")
 val CUSTOM_SHADER = """
@@ -81,8 +76,7 @@ val CUSTOM_SHADER = """
 @SuppressLint("ReturnFromAwaitPointerEventScope")
 @Composable
 fun FrequencySelector(
-    viewModel: MixerViewModel,
-    onTouch: (action: Int, frequency: Float, amplitude: Float) -> Unit = { _, _, _ -> },
+    viewModel: MixerViewModel
 ) {
     // A surface container using the 'background' color from the theme
     var log by remember { mutableStateOf("") }
@@ -90,13 +84,13 @@ fun FrequencySelector(
     var size by remember { mutableStateOf(IntSize.Zero) }
     var color by remember { mutableStateOf(Color.Blue) }
     var sliderPosition by remember { mutableStateOf(20f..20000f) }
-    var points by remember { mutableStateOf(InputTouch.Zero) }
+    var points by remember { mutableStateOf(InputTouch.Companion.Zero) }
 
     var isRecording by remember { mutableStateOf(false) }
     var isSaving by remember { mutableStateOf(false) }
     var isPlaying by remember { mutableStateOf(false) }
 
-    var tmpPoints by remember { mutableStateOf(InputTouch.Zero) }
+    var tmpPoints by remember { mutableStateOf(InputTouch.Companion.Zero) }
 
     var salvedPoints by remember { mutableStateOf(emptyList<InputTouch>()) }
 
@@ -358,26 +352,7 @@ fun FrequencySelector(
     }
 }
 
-@Composable
-fun AddButton(
-    onClick: () -> Unit
-) {
-    IconButton(
-        modifier = Modifier
-            .padding(5.dp)
-            .size(40.dp)
-            .background(Color(0.0f, 0.4f, 0.7f, 0.6f)),
-        onClick = onClick
-    ) {
-        Icon(
-            modifier = Modifier
-                .padding(5.dp)
-                .size(40.dp),
-            painter = painterResource(R.drawable.add),
-            contentDescription = null
-        )
-    }
-}
+
 
 
 

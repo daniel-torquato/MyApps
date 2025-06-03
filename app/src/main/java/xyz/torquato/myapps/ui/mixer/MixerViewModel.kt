@@ -1,9 +1,9 @@
-package xyz.torquato.myapps.ui.views
+package xyz.torquato.myapps.ui.mixer
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import xyz.torquato.myapps.api.sound.ISoundRepository
-import xyz.torquato.myapps.ui.views.model.Note
+import xyz.torquato.myapps.ui.mixer.model.Note
 import javax.inject.Inject
 
 class MixerViewModel @Inject constructor(

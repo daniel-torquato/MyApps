@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.ui.views.model
+package xyz.torquato.myapps.ui.mixer.model
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApps">
         <activity
-            android:name=".ui.activities.MusicActivity"
+            android:name=".ui.mixer.MusicActivity"
             android:exported="true"
             android:theme="@style/Theme.MyApps">
             <intent-filter>

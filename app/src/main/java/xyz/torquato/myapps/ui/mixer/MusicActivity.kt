@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.ui.activities
+package xyz.torquato.myapps.ui.mixer
 
 import android.os.Bundle
 import android.window.OnBackInvokedDispatcher
@@ -6,14 +6,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.room.Room
 import dagger.hilt.android.AndroidEntryPoint
 import xyz.torquato.myapps.api.sound.ISoundRepository
-import xyz.torquato.myapps.data.track.datasource.TrackDatabase
-import xyz.torquato.myapps.data.waves.SoundRepository
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
-import xyz.torquato.myapps.ui.views.FrequencySelector
-import xyz.torquato.myapps.ui.views.MixerViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,14 +26,9 @@ class MusicActivity : ComponentActivity() {
         soundRepository.start()
         setContent {
             MyAppsTheme {
-                FrequencySelector(viewModel = viewMode, onTouch = ::onTouchEvent)
+                FrequencySelector(viewModel = viewMode)
             }
         }
-    }
-
-    private fun onTouchEvent(action: Int, frequency: Float, amplitude: Float) {
-        println("MyTag: action=$action, frequency=$frequency, amplitude=$amplitude")
-        soundRepository.setTouchEvent(action, frequency, amplitude)
     }
 
     override fun getOnBackInvokedDispatcher(): OnBackInvokedDispatcher {

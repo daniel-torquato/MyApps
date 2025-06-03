@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.ui.views.model
+package xyz.torquato.myapps.ui.mixer.model
 
 data class Note(
     val start: Long,
