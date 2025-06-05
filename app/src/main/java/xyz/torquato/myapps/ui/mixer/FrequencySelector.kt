@@ -24,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,6 +36,7 @@ import xyz.torquato.myapps.ui.components.AddButton
 import xyz.torquato.myapps.ui.components.RangeSelector
 import xyz.torquato.myapps.ui.components.TextButton
 import xyz.torquato.myapps.ui.mixer.model.InputTouch
+import xyz.torquato.myapps.ui.mixer.model.MixerUiState
 import xyz.torquato.myapps.ui.mixer.model.Note
 import xyz.torquato.myapps.ui.mixer.model.Track
 
@@ -63,19 +63,14 @@ fun FrequencySelectorProducer(
     var size by remember { mutableStateOf(IntSize.Zero) }
     var points by remember { mutableStateOf(InputTouch.Companion.Zero) }
 
-    var isRecording by remember { mutableStateOf(false) }
-    var recordingTrack by remember { mutableIntStateOf(-1) }
-    var playingTrack by remember { mutableIntStateOf(-1) }
-    var isSaving by remember { mutableStateOf(false) }
-    var isPlaying by remember { mutableStateOf(false) }
-
     var tmpPoints by remember { mutableStateOf(InputTouch.Companion.Zero) }
 
     var salvedPoints by remember { mutableStateOf(emptyList<InputTouch>()) }
-    var salvedNotes by remember { mutableStateOf(Track.Empty) }
     var salvedTimeFactors by remember { mutableStateOf(emptyList<Float>()) }
 
     var enabled by remember { mutableStateOf(false) }
+
+    var uiState by remember { mutableStateOf(MixerUiState.Empty) }
 
     LaunchedEffect(points, enabled) {
         if (points.touchList.isNotEmpty() && enabled) {
@@ -87,33 +82,33 @@ fun FrequencySelectorProducer(
     }
 
     LaunchedEffect(points) {
-        if (isRecording) {
+        if (uiState.isRecording) {
             tmpPoints = points
-            if (recordingTrack >= 0) {
+            if (uiState.recordingIndex >= 0) {
                 if (salvedPoints.isNotEmpty()) {
-                    val buffer = salvedPoints[recordingTrack].touchList.toMutableList()
+                    val buffer = salvedPoints[uiState.recordingIndex].touchList.toMutableList()
                     if (buffer.isNotEmpty()) {
                         buffer += points.touchList.first()
                         val tmpPoints = salvedPoints.toMutableList()
-                        tmpPoints[recordingTrack] = tmpPoints[recordingTrack].copy(
+                        tmpPoints[uiState.recordingIndex] = tmpPoints[uiState.recordingIndex].copy(
                             touchList = buffer.toList()
                         )
                         salvedPoints = tmpPoints
                     }
                 }
-                salvedNotes = salvedPoints.toNote(
-                    0,
-                    salvedTimeFactors.map { (1000L * it / (1 - it)).toLong() })
-                recordingTrack = -1
-                println("MyTag: Get Track $recordingTrack")
+                uiState = uiState.copy(
+                    track = salvedPoints.toNote(0, salvedTimeFactors.map { (1000L * it / (1 - it)).toLong() })
+                )
+                uiState = uiState.copy(recordingIndex = -1)
+                println("MyTag: Get Track ${uiState.recordingIndex}")
             }
-            isRecording = false
+            uiState = uiState.copy(isRecording = false)
             println("MyTag: Points $points")
         }
     }
 
-    LaunchedEffect(isSaving) {
-        if (isSaving) {
+    LaunchedEffect(uiState.isSaving) {
+        if (uiState.isSaving) {
             val oldPoints = salvedPoints.toMutableList()
             oldPoints += tmpPoints
             salvedPoints = oldPoints.toList()
@@ -122,31 +117,37 @@ fun FrequencySelectorProducer(
             oldDurations += (3f / 13f)
             salvedTimeFactors = oldDurations.toList()
 
-            salvedNotes =
-                salvedPoints.toNote(0L, salvedTimeFactors.map { (1000L * it / (1 - it)).toLong() })
-            isSaving = false
+            uiState = uiState.copy(
+                track = salvedPoints.toNote(0L, salvedTimeFactors.map { (1000L * it / (1 - it)).toLong() })
+            )
+            uiState = uiState.copy(isSaving = false)
         }
     }
 
     LaunchedEffect(salvedTimeFactors) {
         salvedTimeFactors.forEachIndexed { index, timeFactor ->
-            val notes = salvedNotes.notes.toMutableList()
+            val track = uiState.track
+            val notes = track.notes.toMutableList()
             notes[index] =
                 notes[index].copy(duration = (1000L * timeFactor / (1 - timeFactor)).toLong())
-            salvedNotes = salvedNotes.copy(notes = notes.toList())
+            uiState = uiState.copy(
+                track = track.copy(notes = notes)
+            )
         }
     }
 
-    LaunchedEffect(isPlaying) {
-        if (isPlaying) {
-            salvedNotes.notes.forEachIndexed { index, note ->
-                playingTrack = index
+    LaunchedEffect(uiState.isPlaying) {
+        if (uiState.isPlaying) {
+            uiState.track.notes.forEachIndexed { index, note ->
+                uiState = uiState.copy(playingIndex = index)
                 onNotePlay(note)
                 println("MyTag: $index")
                 onPause()
             }
-            playingTrack = -1
-            isPlaying = false
+            uiState = uiState.copy(
+                isPlaying = false,
+                playingIndex = -1
+            )
         }
     }
 
@@ -172,18 +173,18 @@ fun FrequencySelectorProducer(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     TextButton(
-                        onClick = { isRecording = true },
-                        containerColor = if (isRecording) Color.Red else Color.Green,
+                        onClick = { uiState = uiState.copy(isRecording = true) },
+                        containerColor = if (uiState.isRecording) Color.Red else Color.Green,
                         text = "Record"
                     )
                     TextButton(
-                        onClick = { isSaving = true },
-                        containerColor = if (isSaving) Color.Red else Color.Green,
+                        onClick = { uiState = uiState.copy(isSaving = true) },
+                        containerColor = if (uiState.isSaving) Color.Red else Color.Green,
                         text = "Save"
                     )
                     TextButton(
-                        onClick = { isPlaying = true },
-                        containerColor = if (isPlaying) Color.Blue else Color.Green,
+                        onClick = { uiState = uiState.copy(isPlaying = true) },
+                        containerColor = if (uiState.isPlaying) Color.Blue else Color.Green,
                         text = "Play"
                     )
                 }
@@ -206,19 +207,18 @@ fun FrequencySelectorProducer(
                         .fillMaxWidth(),
                     contentPadding = PaddingValues(3.dp)
                 ) {
-                    items(salvedPoints.size) { index ->
-                        println("MyTag: composing $index $playingTrack")
+                    items(uiState.track.notes.size) { index ->
+                        println("MyTag: composing $index ${uiState.playingIndex}")
                         LazyRow(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(if (playingTrack == index) Color.Red else Color.Transparent)
+                                .background(if (uiState.playingIndex == index) Color.Red else Color.Transparent)
                                 .border(1.dp, Color.Red),
                             contentPadding = PaddingValues(5.dp)
                         ) {
-                            items(salvedPoints[index].touchList.size) { subIndex ->
-                                val red = salvedNotes.notes[index].tones[subIndex].amplitude
-                                val green =
-                                    salvedNotes.notes[index].tones[subIndex].frequency / (20000 - 20)
+                            items(uiState.track.notes[index].tones.size) { subIndex ->
+                                val red = uiState.track.notes[index].tones[subIndex].amplitude
+                                val green = uiState.track.notes[index].tones[subIndex].frequency / (20000 - 20)
                                 Button(
                                     modifier = Modifier
                                         .padding(5.dp)
@@ -234,13 +234,11 @@ fun FrequencySelectorProducer(
                             }
                             item {
                                 AddButton {
-                                    isRecording = true
-                                    recordingTrack = index
+                                    uiState = uiState.copy(isRecording = true, recordingIndex = index)
                                 }
                             }
                         }
                         Row {
-                            //var slider by remember { mutableFloatStateOf(0.5f) }
                             val duration = salvedTimeFactors[index]
                             Text(
                                 modifier = Modifier
