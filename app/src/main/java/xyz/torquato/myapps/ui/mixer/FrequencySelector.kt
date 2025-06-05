@@ -33,12 +33,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
 import xyz.torquato.myapps.ui.components.AddButton
 import xyz.torquato.myapps.ui.components.RangeSelector
 import xyz.torquato.myapps.ui.components.TextButton
 import xyz.torquato.myapps.ui.mixer.model.InputTouch
 import xyz.torquato.myapps.ui.mixer.model.Note
+import xyz.torquato.myapps.ui.mixer.model.Track
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("ReturnFromAwaitPointerEventScope")
@@ -46,11 +46,25 @@ import xyz.torquato.myapps.ui.mixer.model.Note
 fun FrequencySelector(
     viewModel: MixerViewModel
 ) {
+    FrequencySelectorProducer(
+        onTrackPlay = viewModel::play,
+        onNotePlay = viewModel::play,
+        onPause = viewModel::reset
+    )
+}
+
+
+@Composable
+fun FrequencySelectorProducer(
+    onTrackPlay: (Track) -> Unit,
+    onNotePlay: suspend (Note) -> Unit,
+    onPause: () -> Unit
+) {
     var size by remember { mutableStateOf(IntSize.Zero) }
     var points by remember { mutableStateOf(InputTouch.Companion.Zero) }
 
     var isRecording by remember { mutableStateOf(false) }
-    var recordingTrack by remember { mutableIntStateOf(0) }
+    var recordingTrack by remember { mutableIntStateOf(-1) }
     var playingTrack by remember { mutableIntStateOf(-1) }
     var isSaving by remember { mutableStateOf(false) }
     var isPlaying by remember { mutableStateOf(false) }
@@ -58,23 +72,17 @@ fun FrequencySelector(
     var tmpPoints by remember { mutableStateOf(InputTouch.Companion.Zero) }
 
     var salvedPoints by remember { mutableStateOf(emptyList<InputTouch>()) }
-    var salvedNotes by remember { mutableStateOf(emptyList<Note>()) }
+    var salvedNotes by remember { mutableStateOf(Track.Empty) }
     var salvedTimeFactors by remember { mutableStateOf(emptyList<Float>()) }
 
     var enabled by remember { mutableStateOf(false) }
 
     LaunchedEffect(points, enabled) {
         if (points.touchList.isNotEmpty() && enabled) {
-            val freqRange = (points.scale.endInclusive - points.scale.start)
-            val freqStart = points.scale.start
-            val offset = points.touchList.first()
-            val yFactor = (offset.y / size.height)
-            val xFactor = (offset.x / size.width)
-            val freq = yFactor * freqRange + freqStart
-            val amplitude = xFactor
-            viewModel.add(freq, amplitude)
+            val note = points.toNote(300L)
+            onNotePlay(note)
         } else {
-            viewModel.reset()
+            onPause()
         }
     }
 
@@ -93,7 +101,9 @@ fun FrequencySelector(
                         salvedPoints = tmpPoints
                     }
                 }
-                salvedNotes = salvedPoints.toNote(salvedTimeFactors.map { (1000L * it / (1 - it)).toLong()})
+                salvedNotes = salvedPoints.toNote(
+                    0,
+                    salvedTimeFactors.map { (1000L * it / (1 - it)).toLong() })
                 recordingTrack = -1
                 println("MyTag: Get Track $recordingTrack")
             }
@@ -112,33 +122,34 @@ fun FrequencySelector(
             oldDurations += (3f / 13f)
             salvedTimeFactors = oldDurations.toList()
 
-            salvedNotes = salvedPoints.toNote(salvedTimeFactors.map { (1000L * it / (1 - it)).toLong()})
+            salvedNotes =
+                salvedPoints.toNote(0L, salvedTimeFactors.map { (1000L * it / (1 - it)).toLong() })
             isSaving = false
         }
     }
 
     LaunchedEffect(salvedTimeFactors) {
         salvedTimeFactors.forEachIndexed { index, timeFactor ->
-            val notes = salvedNotes.toMutableList()
-            notes[index] = notes[index].copy(duration = (1000L * timeFactor / (1 - timeFactor)).toLong())
-            salvedNotes = notes.toList()
+            val notes = salvedNotes.notes.toMutableList()
+            notes[index] =
+                notes[index].copy(duration = (1000L * timeFactor / (1 - timeFactor)).toLong())
+            salvedNotes = salvedNotes.copy(notes = notes.toList())
         }
     }
 
     LaunchedEffect(isPlaying) {
         if (isPlaying) {
-            salvedNotes.forEachIndexed { index, note ->
-                note.tones.forEach { touch ->
-                    viewModel.add(touch.frequency, touch.amplitude)
-                }
+            salvedNotes.notes.forEachIndexed { index, note ->
                 playingTrack = index
-                delay(note.duration)
-                viewModel.reset()
+                onNotePlay(note)
+                println("MyTag: $index")
+                onPause()
             }
             playingTrack = -1
             isPlaying = false
         }
     }
+
 
     Surface(
         modifier = Modifier
@@ -196,6 +207,7 @@ fun FrequencySelector(
                     contentPadding = PaddingValues(3.dp)
                 ) {
                     items(salvedPoints.size) { index ->
+                        println("MyTag: composing $index $playingTrack")
                         LazyRow(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -204,8 +216,9 @@ fun FrequencySelector(
                             contentPadding = PaddingValues(5.dp)
                         ) {
                             items(salvedPoints[index].touchList.size) { subIndex ->
-                                val red = salvedNotes[index].tones[subIndex].amplitude
-                                val green = salvedNotes[index].tones[subIndex].frequency  / (20000 - 20)
+                                val red = salvedNotes.notes[index].tones[subIndex].amplitude
+                                val green =
+                                    salvedNotes.notes[index].tones[subIndex].frequency / (20000 - 20)
                                 Button(
                                     modifier = Modifier
                                         .padding(5.dp)
@@ -254,7 +267,6 @@ fun FrequencySelector(
         }
     }
 }
-
 
 
 
