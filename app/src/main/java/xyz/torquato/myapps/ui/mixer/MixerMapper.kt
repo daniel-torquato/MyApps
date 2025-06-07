@@ -5,15 +5,17 @@ import xyz.torquato.myapps.ui.mixer.model.Note
 import xyz.torquato.myapps.ui.mixer.model.Tone
 import xyz.torquato.myapps.ui.mixer.model.Track
 
+fun InputTouch.toTones(): List<Tone> = touchList.map { point ->
+    val freqRange = (scale.endInclusive - scale.start)
+    val freqStart = scale.start
+    Tone(
+        frequency = (point.y / size.height) * freqRange + freqStart,
+        amplitude = (point.x / size.width)
+    )
+}
+
 fun InputTouch.toNote(duration: Long): Note = Note(
-    tones = touchList.map { point ->
-        val freqRange = (scale.endInclusive - scale.start)
-        val freqStart = scale.start
-        Tone(
-            frequency = (point.y / size.height) * freqRange + freqStart,
-            amplitude = (point.x / size.width)
-        )
-    },
+    tones = toTones(),
     duration = duration
 )
 

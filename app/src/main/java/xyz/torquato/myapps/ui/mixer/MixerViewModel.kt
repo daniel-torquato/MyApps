@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import xyz.torquato.myapps.api.sound.ISoundRepository
 import xyz.torquato.myapps.ui.mixer.model.Note
+import xyz.torquato.myapps.ui.mixer.model.Tone
 import xyz.torquato.myapps.ui.mixer.model.Track
 import javax.inject.Inject
 
@@ -37,6 +38,17 @@ class MixerViewModel @Inject constructor(
             println("MyTag: Playing $tone")
             soundRepository.setTouchEvent(0, tone.frequency, tone.amplitude)
             delay(note.duration)
+        }
+    }
+
+    fun play(tones: List<Tone>) {
+        if (tones.isNotEmpty()) {
+            val tone = tones.first()
+            //  viewModelScope.launch {
+            println("MyTag: Playing $tone")
+            soundRepository.setTouchEvent(0, tone.frequency, tone.amplitude)
+        } else {
+            soundRepository.setTouchEvent(1, 0f, 0f)
         }
     }
 

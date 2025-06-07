@@ -34,9 +34,9 @@ import androidx.compose.ui.unit.dp
 import xyz.torquato.myapps.ui.components.AddButton
 import xyz.torquato.myapps.ui.components.RangeSelector
 import xyz.torquato.myapps.ui.components.TextButton
-import xyz.torquato.myapps.ui.mixer.model.InputTouch
 import xyz.torquato.myapps.ui.mixer.model.MixerUiState
 import xyz.torquato.myapps.ui.mixer.model.Note
+import xyz.torquato.myapps.ui.mixer.model.Tone
 import xyz.torquato.myapps.ui.mixer.model.Track
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +48,8 @@ fun FrequencySelector(
     FrequencySelectorProducer(
         onTrackPlay = viewModel::play,
         onNotePlay = viewModel::play,
-        onPause = viewModel::reset
+        onPause = viewModel::reset,
+        onTouch = viewModel::play
     )
 }
 
@@ -57,32 +58,32 @@ fun FrequencySelector(
 fun FrequencySelectorProducer(
     onTrackPlay: (Track) -> Unit,
     onNotePlay: suspend (Note) -> Unit,
-    onPause: () -> Unit
+    onPause: () -> Unit,
+    onTouch: (List<Tone>) -> Unit
 ) {
     var size by remember { mutableStateOf(IntSize.Zero) }
-    var points by remember { mutableStateOf(InputTouch.Companion.Zero) }
 
+    var tones by remember { mutableStateOf(emptyList<Tone>()) }
     var uiState by remember { mutableStateOf(MixerUiState.Empty) }
 
-    LaunchedEffect(points, uiState.isTouching) {
-        if (points.touchList.isNotEmpty() && uiState.isTouching) {
-            val note = points.toNote(300L)
-            onNotePlay(note)
+    LaunchedEffect(tones, uiState.isTouching) {
+        if (uiState.isTouching) {
+            onTouch(tones)
         } else {
             onPause()
         }
     }
 
-    LaunchedEffect(points) {
+    LaunchedEffect(tones) {
         if (uiState.isRecording) {
             if (uiState.recordingIndex >= 0) {
                 if (uiState.track.notes.isNotEmpty()) {
-                    val tones = uiState.track.notes[uiState.recordingIndex].tones.toMutableList()
-                    tones += points.toNote(0L).tones
+                    val oldTones = uiState.track.notes[uiState.recordingIndex].tones.toMutableList()
+                    oldTones += tones
                     val notes = uiState.track.notes.toMutableList()
                     notes[uiState.recordingIndex] =
                         uiState.track.notes[uiState.recordingIndex].copy(
-                            tones = tones
+                            tones = oldTones
                         )
                     uiState = uiState.copy(
                         track = uiState.track.copy(notes = notes)
@@ -92,7 +93,7 @@ fun FrequencySelectorProducer(
                 uiState = uiState.copy(recordingIndex = -1)
             }
             uiState = uiState.copy(isRecording = false)
-            println("MyTag: Points $points")
+            println("MyTag: Points $tones")
         }
     }
 
@@ -117,9 +118,7 @@ fun FrequencySelectorProducer(
         Column {
             RangeSelector(
                 onTouchEvent = { uiState = uiState.copy(isTouching = it) },
-                onInputTouch = {
-                    points = it
-                },
+                onInputTouch = { tones = it.toTones() },
             )
             Column(
                 modifier = Modifier
