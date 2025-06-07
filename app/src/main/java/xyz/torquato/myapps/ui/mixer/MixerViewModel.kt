@@ -31,15 +31,13 @@ class MixerViewModel @Inject constructor(
     }
 
     suspend fun play(note: Note) {
-        // note.tones.forEach { tone ->
-        //     soundRepository.setTouchEvent(0, tone.frequency, tone.amplitude)
-        // }
-        val tone = note.tones.first()
-        //  viewModelScope.launch {
-        println("MyTag: Playing $tone")
-        soundRepository.setTouchEvent(0, tone.frequency, tone.amplitude)
-        delay(note.duration)
-        //  }
+        if (note.tones.isNotEmpty()) {
+            val tone = note.tones.first()
+            //  viewModelScope.launch {
+            println("MyTag: Playing $tone")
+            soundRepository.setTouchEvent(0, tone.frequency, tone.amplitude)
+            delay(note.duration)
+        }
     }
 
     fun reset() {

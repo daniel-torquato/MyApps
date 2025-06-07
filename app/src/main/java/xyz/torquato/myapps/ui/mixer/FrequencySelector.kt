@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -63,17 +62,10 @@ fun FrequencySelectorProducer(
     var size by remember { mutableStateOf(IntSize.Zero) }
     var points by remember { mutableStateOf(InputTouch.Companion.Zero) }
 
-    var tmpPoints by remember { mutableStateOf(InputTouch.Companion.Zero) }
-
-    var salvedPoints by remember { mutableStateOf(emptyList<InputTouch>()) }
-    var salvedTimeFactors by remember { mutableStateOf(emptyList<Float>()) }
-
-    var enabled by remember { mutableStateOf(false) }
-
     var uiState by remember { mutableStateOf(MixerUiState.Empty) }
 
-    LaunchedEffect(points, enabled) {
-        if (points.touchList.isNotEmpty() && enabled) {
+    LaunchedEffect(points, uiState.isTouching) {
+        if (points.touchList.isNotEmpty() && uiState.isTouching) {
             val note = points.toNote(300L)
             onNotePlay(note)
         } else {
@@ -83,56 +75,24 @@ fun FrequencySelectorProducer(
 
     LaunchedEffect(points) {
         if (uiState.isRecording) {
-            tmpPoints = points
             if (uiState.recordingIndex >= 0) {
-                if (salvedPoints.isNotEmpty()) {
-                    val buffer = salvedPoints[uiState.recordingIndex].touchList.toMutableList()
-                    if (buffer.isNotEmpty()) {
-                        buffer += points.touchList.first()
-                        val tmpPoints = salvedPoints.toMutableList()
-                        tmpPoints[uiState.recordingIndex] = tmpPoints[uiState.recordingIndex].copy(
-                            touchList = buffer.toList()
+                if (uiState.track.notes.isNotEmpty()) {
+                    val tones = uiState.track.notes[uiState.recordingIndex].tones.toMutableList()
+                    tones += points.toNote(0L).tones
+                    val notes = uiState.track.notes.toMutableList()
+                    notes[uiState.recordingIndex] =
+                        uiState.track.notes[uiState.recordingIndex].copy(
+                            tones = tones
                         )
-                        salvedPoints = tmpPoints
-                    }
+                    uiState = uiState.copy(
+                        track = uiState.track.copy(notes = notes)
+                    )
                 }
-                uiState = uiState.copy(
-                    track = salvedPoints.toNote(0, salvedTimeFactors.map { (1000L * it / (1 - it)).toLong() })
-                )
-                uiState = uiState.copy(recordingIndex = -1)
                 println("MyTag: Get Track ${uiState.recordingIndex}")
+                uiState = uiState.copy(recordingIndex = -1)
             }
             uiState = uiState.copy(isRecording = false)
             println("MyTag: Points $points")
-        }
-    }
-
-    LaunchedEffect(uiState.isSaving) {
-        if (uiState.isSaving) {
-            val oldPoints = salvedPoints.toMutableList()
-            oldPoints += tmpPoints
-            salvedPoints = oldPoints.toList()
-
-            val oldDurations = salvedTimeFactors.toMutableList()
-            oldDurations += (3f / 13f)
-            salvedTimeFactors = oldDurations.toList()
-
-            uiState = uiState.copy(
-                track = salvedPoints.toNote(0L, salvedTimeFactors.map { (1000L * it / (1 - it)).toLong() })
-            )
-            uiState = uiState.copy(isSaving = false)
-        }
-    }
-
-    LaunchedEffect(salvedTimeFactors) {
-        salvedTimeFactors.forEachIndexed { index, timeFactor ->
-            val track = uiState.track
-            val notes = track.notes.toMutableList()
-            notes[index] =
-                notes[index].copy(duration = (1000L * timeFactor / (1 - timeFactor)).toLong())
-            uiState = uiState.copy(
-                track = track.copy(notes = notes)
-            )
         }
     }
 
@@ -151,13 +111,12 @@ fun FrequencySelectorProducer(
         }
     }
 
-
     Surface(
         modifier = Modifier
     ) {
         Column {
             RangeSelector(
-                onTouchEvent = { enabled = it },
+                onTouchEvent = { uiState = uiState.copy(isTouching = it) },
                 onInputTouch = {
                     points = it
                 },
@@ -188,19 +147,6 @@ fun FrequencySelectorProducer(
                         text = "Play"
                     )
                 }
-                LazyRow(
-                    modifier = Modifier.padding(10.dp)
-                ) {
-                    items(tmpPoints.touchList.size) { index ->
-                        val red = (tmpPoints.touchList[index].x / tmpPoints.size.width).toFloat()
-                        val green = (tmpPoints.touchList[index].y / tmpPoints.size.height).toFloat()
-                        Box(
-                            modifier = Modifier
-                                .size(40.dp)
-                                .background(Color(red, green, 0.0f, 1.0f))
-                        )
-                    }
-                }
 
                 LazyColumn(
                     modifier = Modifier
@@ -218,7 +164,8 @@ fun FrequencySelectorProducer(
                         ) {
                             items(uiState.track.notes[index].tones.size) { subIndex ->
                                 val red = uiState.track.notes[index].tones[subIndex].amplitude
-                                val green = uiState.track.notes[index].tones[subIndex].frequency / (20000 - 20)
+                                val green =
+                                    uiState.track.notes[index].tones[subIndex].frequency / (20000 - 20)
                                 Button(
                                     modifier = Modifier
                                         .padding(5.dp)
@@ -234,33 +181,57 @@ fun FrequencySelectorProducer(
                             }
                             item {
                                 AddButton {
-                                    uiState = uiState.copy(isRecording = true, recordingIndex = index)
+                                    println("MyTag: Recording $index")
+                                    uiState =
+                                        uiState.copy(isRecording = true, recordingIndex = index)
                                 }
                             }
                         }
                         Row {
-                            val duration = salvedTimeFactors[index]
+                            val duration = uiState.track.notes[index].duration.toFloat() / 1000f
+                            val factor = duration / (1 + duration)
                             Text(
                                 modifier = Modifier
                                     .fillMaxWidth(0.3f)
                                     .padding(10.dp)
                                     .height(30.dp),
-                                text = "${duration / (1 - duration)}"
+                                text = "$duration"
                             )
                             Slider(
                                 modifier = Modifier.fillMaxWidth(1f),
-                                value = salvedTimeFactors[index],
+                                value = factor,
                                 onValueChange = {
-                                    val durations = salvedTimeFactors.toMutableList()
-                                    durations[index] = it
-                                    salvedTimeFactors = durations.toList()
+                                    val notes = uiState.track.notes.toMutableList()
+                                    notes[index] = notes[index].copy(
+                                        duration = (1000L * it / (1 - it)).toLong()
+                                    )
+                                    uiState = uiState.copy(
+                                        track = uiState.track.copy(
+                                            notes = notes
+                                        )
+                                    )
                                 },
                                 enabled = true,
                                 valueRange = 0f..1f
                             )
                         }
                     }
+                    item {
+                        AddButton {
+                            println("MyTag: Recording")
+                            val notes = uiState.track.notes.toMutableList()
+                            notes += Note.empty()
+                            uiState = uiState.copy(
+                                track = uiState.track.copy(
+                                    notes = notes
+                                ),
+                                recordingIndex = notes.size - 1,
+                                isRecording = true
+                            )
+                        }
+                    }
                 }
+
             }
         }
     }

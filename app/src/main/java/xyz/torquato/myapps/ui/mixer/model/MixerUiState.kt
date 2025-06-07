@@ -4,6 +4,7 @@ data class MixerUiState(
     val isRecording: Boolean,
     val recordingIndex: Int,
     val isSaving: Boolean,
+    val isTouching: Boolean,
     val isPlaying: Boolean,
     val track: Track,
     val playingIndex: Int
@@ -32,7 +33,8 @@ data class MixerUiState(
             isSaving = false,
             isPlaying = false,
             track = Track.Empty,
-            playingIndex = -1
+            playingIndex = -1,
+            isTouching = false
         )
     }
 }
