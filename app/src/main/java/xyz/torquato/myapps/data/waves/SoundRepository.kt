@@ -6,6 +6,9 @@ import javax.inject.Inject
 class SoundRepository @Inject constructor() : ISoundRepository {
 
     private external fun touchEvent(action: Int, frequency: Float, amplitude: Float)
+    external override fun addTone(frequency: Float, amplitude: Float)
+    external fun clean()
+    external override fun performControl(control: Boolean)
     private external fun startEngine()
     private external fun stopEngine()
 
@@ -14,7 +17,16 @@ class SoundRepository @Inject constructor() : ISoundRepository {
     }
 
     override fun setTouchEvent(action: Int, frequency: Float, amplitude: Float) {
-        touchEvent(action, frequency, amplitude)
+        //touchEvent(action, frequency, amplitude)
+        if (action == 0) {
+            addTone(frequency, amplitude)
+            performControl(true)
+        } else
+            performControl(false)
+    }
+
+    override fun clear() {
+        clean()
     }
 
     override fun start() {

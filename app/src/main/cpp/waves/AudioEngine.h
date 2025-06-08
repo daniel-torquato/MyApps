@@ -15,6 +15,8 @@ public:
     void restart();
     void setToneOn(bool isToneOn);
     void setTone(float frequency, float amplitude);
+    void addTone(float frequency, float amplitude);
+    void clean();
 
 private:
     Oscillator oscillator_;

@@ -23,11 +23,31 @@ jni_prefix(touchEvent)(JNIEnv *, jobject, jint action,
             break;
     }
 }
+
+extern "C"
+JNIEXPORT void JNICALL
+jni_prefix(performControl)(JNIEnv *, jobject,  jboolean on) {
+    audioEngine->setToneOn(on);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+jni_prefix(addTone)(JNIEnv *, jobject,  jfloat frequency, jfloat amplitude) {
+    audioEngine->addTone(frequency, amplitude);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+jni_prefix(clean)(JNIEnv *, jobject) {
+    audioEngine->clean();
+}
+
 extern "C"
 JNIEXPORT void JNICALL
 jni_prefix(startEngine)(JNIEnv *, jobject) {
     audioEngine->start();
 }
+
 extern "C"
 JNIEXPORT void JNICALL
 jni_prefix(stopEngine)(JNIEnv *, jobject) {

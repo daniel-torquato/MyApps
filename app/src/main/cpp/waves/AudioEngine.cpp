@@ -96,3 +96,11 @@ void AudioEngine::setToneOn(bool isToneOn) {
 void AudioEngine::setTone(float frequency, float amplitude) {
     oscillator_.setTone(frequency, amplitude);
 }
+
+void AudioEngine::addTone(float frequency, float amplitude) {
+    oscillator_.addTone(frequency, amplitude);
+}
+
+void AudioEngine::clean() {
+    oscillator_.reset();
+}

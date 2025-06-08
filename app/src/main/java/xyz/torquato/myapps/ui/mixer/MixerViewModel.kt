@@ -18,7 +18,7 @@ class MixerViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<Note> = MutableStateFlow(Note.empty())
 
     fun add(frequency: Float, amplitude: Float) {
-        soundRepository.setTouchEvent(0, frequency, amplitude)
+        soundRepository.addTone(frequency, amplitude)
     }
 
     fun play(track: Track) {
@@ -33,26 +33,33 @@ class MixerViewModel @Inject constructor(
 
     suspend fun play(note: Note) {
         if (note.tones.isNotEmpty()) {
-            val tone = note.tones.first()
+            //val tone = note.tones.first()
             //  viewModelScope.launch {
-            println("MyTag: Playing $tone")
-            soundRepository.setTouchEvent(0, tone.frequency, tone.amplitude)
+           // println("MyTag: Playing $tone")
+            note.tones.forEach { tone ->
+                soundRepository.setTouchEvent(0, tone.frequency, tone.amplitude)
+            }
+            soundRepository.performControl(true)
             delay(note.duration)
+            soundRepository.performControl(false)
         }
     }
 
     fun play(tones: List<Tone>) {
         if (tones.isNotEmpty()) {
-            val tone = tones.first()
             //  viewModelScope.launch {
-            println("MyTag: Playing $tone")
-            soundRepository.setTouchEvent(0, tone.frequency, tone.amplitude)
+            soundRepository.performControl(false)
+            soundRepository.clear()
+            tones.forEach { tone ->
+                soundRepository.addTone(tone.frequency, tone.amplitude)
+            }
+            soundRepository.performControl(true)
         } else {
-            soundRepository.setTouchEvent(1, 0f, 0f)
+            soundRepository.performControl(false)
         }
     }
 
     fun reset() {
-        soundRepository.setTouchEvent(1, 0f, 0f)
+        soundRepository.clear()
     }
 }
