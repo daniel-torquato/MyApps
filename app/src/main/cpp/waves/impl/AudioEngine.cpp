@@ -2,7 +2,7 @@
 // Created by DAT20 on 16/12/2023.
 //
 #include <android/log.h>
-#include "AudioEngine.h"
+#include "../api/AudioEngine.h"
 #include <thread>
 #include <mutex>
 
@@ -93,14 +93,10 @@ void AudioEngine::setToneOn(bool isToneOn) {
     oscillator_.setWaveOn(isToneOn);
 }
 
-void AudioEngine::setTone(float frequency, float amplitude) {
-    oscillator_.setTone(frequency, amplitude);
+void AudioEngine::setTone(float frequency, float amplitude, int index) {
+    oscillator_.setTone(frequency, amplitude, index);
 }
 
-void AudioEngine::addTone(float frequency, float amplitude) {
-    oscillator_.addTone(frequency, amplitude);
-}
-
-void AudioEngine::clean() {
-    oscillator_.reset();
+void AudioEngine::allocate(int size) {
+    oscillator_.allocate(size);
 }

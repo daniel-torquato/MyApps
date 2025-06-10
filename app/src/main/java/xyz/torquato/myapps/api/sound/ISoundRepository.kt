@@ -1,12 +1,14 @@
 package xyz.torquato.myapps.api.sound
 
+import xyz.torquato.myapps.ui.mixer.model.Tone
+
 interface ISoundRepository {
 
     fun performControl(control: Boolean)
 
-    fun setTouchEvent(action: Int, frequency: Float, amplitude: Float)
+    fun setTone(frequency: Float, amplitude: Float)
 
-    fun addTone(frequency: Float, amplitude: Float)
+    fun setTones(tones: Array<Tone>)
 
     fun start()
 

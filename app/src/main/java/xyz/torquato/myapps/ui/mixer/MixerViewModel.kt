@@ -18,27 +18,20 @@ class MixerViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<Note> = MutableStateFlow(Note.empty())
 
     fun add(frequency: Float, amplitude: Float) {
-        soundRepository.addTone(frequency, amplitude)
+        soundRepository.setTone(frequency, amplitude)
     }
 
     fun play(track: Track) {
-       // note.tones.forEach { tone ->
-       //     soundRepository.setTouchEvent(0, tone.frequency, tone.amplitude)
-       // }
         val tone = track.notes.first().tones.first()
         viewModelScope.launch {
-            soundRepository.setTouchEvent(0, tone.frequency, tone.amplitude)
+            soundRepository.setTone(tone.frequency, tone.amplitude)
         }
     }
 
     suspend fun play(note: Note) {
         if (note.tones.isNotEmpty()) {
-            //val tone = note.tones.first()
-            //  viewModelScope.launch {
-           // println("MyTag: Playing $tone")
-            note.tones.forEach { tone ->
-                soundRepository.setTouchEvent(0, tone.frequency, tone.amplitude)
-            }
+            println("MyTag: play $note")
+            soundRepository.setTones(note.tones.toTypedArray())
             soundRepository.performControl(true)
             delay(note.duration)
             soundRepository.performControl(false)
@@ -47,12 +40,7 @@ class MixerViewModel @Inject constructor(
 
     fun play(tones: List<Tone>) {
         if (tones.isNotEmpty()) {
-            //  viewModelScope.launch {
-            soundRepository.performControl(false)
-            soundRepository.clear()
-            tones.forEach { tone ->
-                soundRepository.addTone(tone.frequency, tone.amplitude)
-            }
+            soundRepository.setTones(tones.toTypedArray())
             soundRepository.performControl(true)
         } else {
             soundRepository.performControl(false)
@@ -60,6 +48,7 @@ class MixerViewModel @Inject constructor(
     }
 
     fun reset() {
+        soundRepository.performControl(false)
         soundRepository.clear()
     }
 }

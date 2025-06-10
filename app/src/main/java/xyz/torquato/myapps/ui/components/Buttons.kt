@@ -1,8 +1,7 @@
 package xyz.torquato.myapps.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
@@ -17,19 +16,18 @@ import xyz.torquato.myapps.R
 
 @Composable
 fun AddButton(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     IconButton(
-        modifier = Modifier
-            .padding(5.dp)
-            .size(40.dp)
-            .background(Color(0.0f, 0.4f, 0.7f, 0.6f)),
+        modifier = modifier
+            .background(Color(0.0f, 0.4f, 0.7f, 0.6f))
+            .width(40.dp),
         onClick = onClick
     ) {
         Icon(
-            modifier = Modifier
-                .padding(5.dp)
-                .size(40.dp),
+            modifier = modifier
+                .width(40.dp),
             painter = painterResource(R.drawable.add),
             contentDescription = null
         )

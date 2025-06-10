@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Button
@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -124,7 +125,7 @@ fun FrequencySelectorProducer(
                 modifier = Modifier
                     .fillMaxSize()
                     .onSizeChanged { size = it }
-                    .background(Color.Blue)
+                    .background(Color.Transparent)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -153,22 +154,37 @@ fun FrequencySelectorProducer(
                     contentPadding = PaddingValues(3.dp)
                 ) {
                     items(uiState.track.notes.size) { index ->
+                        val duration = uiState.track.notes[index].duration.toFloat() / 1000f
+                        val factor = duration / (1 + duration)
+                        val height = 150.dp * factor
                         println("MyTag: composing $index ${uiState.playingIndex}")
                         LazyRow(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .height(height)
                                 .background(if (uiState.playingIndex == index) Color.Red else Color.Transparent)
                                 .border(1.dp, Color.Red),
                             contentPadding = PaddingValues(5.dp)
                         ) {
+                            item {
+                                AddButton(
+                                    modifier = Modifier.height(height)
+                                ) {
+                                    println("MyTag: Recording $index")
+                                    uiState =
+                                        uiState.copy(isRecording = true, recordingIndex = index)
+                                }
+                            }
                             items(uiState.track.notes[index].tones.size) { subIndex ->
                                 val red = uiState.track.notes[index].tones[subIndex].amplitude
                                 val green =
                                     uiState.track.notes[index].tones[subIndex].frequency / (20000 - 20)
                                 Button(
                                     modifier = Modifier
-                                        .padding(5.dp)
-                                        .size(40.dp),
+                                        .padding(3.dp, 0.dp)
+                                        .width(30.dp)
+                                        .height(height),
+                                    shape = RectangleShape,
                                     colors = ButtonColors(
                                         containerColor = Color(red, green, 0.0f, 1.0f),
                                         contentColor = Color(red, green, 0.0f, 1.0f),
@@ -178,17 +194,10 @@ fun FrequencySelectorProducer(
                                     onClick = {}
                                 ) {}
                             }
-                            item {
-                                AddButton {
-                                    println("MyTag: Recording $index")
-                                    uiState =
-                                        uiState.copy(isRecording = true, recordingIndex = index)
-                                }
-                            }
+
                         }
                         Row {
-                            val duration = uiState.track.notes[index].duration.toFloat() / 1000f
-                            val factor = duration / (1 + duration)
+
                             Text(
                                 modifier = Modifier
                                     .fillMaxWidth(0.3f)
