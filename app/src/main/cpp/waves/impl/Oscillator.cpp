@@ -14,7 +14,7 @@ void Oscillator::setSampleRate(int32_t sampleRate) {
 
 void Oscillator::setTone(double frequency, double amplitude, int index) {
     if (0 <= index && index < toneSize) {
-        energy += amplitude;
+        energy = sqrt(energy * energy + amplitude * amplitude);
         tones_[index].frequency = frequency;
         tones_[index].amplitude = amplitude;
     }
@@ -37,7 +37,7 @@ void Oscillator::render(float *audioData, int32_t numFrames) {
             // Calculates the next sample value for the sine wave.
             float current = 0.0f;
             for (int j = 0; j < toneSize && energy > 0.0f; ++j) {
-                current += (float) (sin(phase_ * tones_[j].frequency) * tones_[j].amplitude / energy);
+                current += (float) (sin(phase_ * tones_[j].frequency) * (tones_[j].amplitude / energy) * tones_[j].amplitude);
             }
             audioData[i] = current;
             phase_ += phaseStep_;

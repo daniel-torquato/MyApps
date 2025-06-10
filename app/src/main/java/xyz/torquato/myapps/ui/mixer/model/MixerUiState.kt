@@ -7,7 +7,8 @@ data class MixerUiState(
     val isTouching: Boolean,
     val isPlaying: Boolean,
     val track: Track,
-    val playingIndex: Int
+    val playingIndex: Int,
+    val playingTones: List<Tone>
 ) {
     //var size by remember { mutableStateOf(IntSize.Zero) }
     //var points by remember { mutableStateOf(InputTouch.Companion.Zero) }
@@ -34,7 +35,8 @@ data class MixerUiState(
             isPlaying = false,
             track = Track.Empty,
             playingIndex = -1,
-            isTouching = false
+            isTouching = false,
+            playingTones = emptyList<Tone>()
         )
     }
 }

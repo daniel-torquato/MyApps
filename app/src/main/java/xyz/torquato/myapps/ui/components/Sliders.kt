@@ -18,7 +18,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PointMode
 import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
@@ -48,14 +52,15 @@ val CUSTOM_SHADER = """
         if (r > start)
             factor = 0;
         
-        return half4(uv.x, uv.y, factor, 1.0);
+        return half4(uv.y, uv.x, factor, 1.0);
     }
 """.trimIndent()
 
 @Composable
 fun RangeSelector(
     onTouchEvent: (Boolean) -> Unit,
-    onInputTouch: (InputTouch) -> Unit
+    onInputTouch: (InputTouch) -> Unit,
+    visualPoints: List<Offset> = emptyList<Offset>()
 ) {
     var size by remember { mutableStateOf(IntSize.Zero) }
     var enabled by remember { mutableStateOf(false) }
@@ -108,6 +113,13 @@ fun RangeSelector(
                 }
                 shader.setFloatUniform("start", animatedAlpha)
                 drawRect(brush = shaderBrush)
+                drawPoints(
+                    points = visualPoints.map { Offset(it.x * size.width, it.y * size.height) },
+                    pointMode = PointMode.Points,
+                    cap = StrokeCap.Round,
+                    color = Color.Blue,
+                    strokeWidth = 30f
+                )
             }
             .pointerInput(Unit) {
                 awaitPointerEventScope {

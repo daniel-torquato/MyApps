@@ -27,10 +27,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import xyz.torquato.myapps.ui.components.AddButton
 import xyz.torquato.myapps.ui.components.RangeSelector
@@ -62,12 +61,12 @@ fun FrequencySelectorProducer(
     onPause: () -> Unit,
     onTouch: (List<Tone>) -> Unit
 ) {
-    var size by remember { mutableStateOf(IntSize.Zero) }
 
     var tones by remember { mutableStateOf(emptyList<Tone>()) }
     var uiState by remember { mutableStateOf(MixerUiState.Empty) }
 
     LaunchedEffect(tones, uiState.isTouching) {
+        println("MyTag: Touching $tones")
         if (uiState.isTouching) {
             onTouch(tones)
         } else {
@@ -101,14 +100,18 @@ fun FrequencySelectorProducer(
     LaunchedEffect(uiState.isPlaying) {
         if (uiState.isPlaying) {
             uiState.track.notes.forEachIndexed { index, note ->
-                uiState = uiState.copy(playingIndex = index)
+                uiState = uiState.copy(
+                    playingIndex = index,
+                    playingTones = note.tones
+                )
                 onNotePlay(note)
-                println("MyTag: $index")
+                println("MyTag: $index ${uiState.playingTones}")
                 onPause()
             }
             uiState = uiState.copy(
                 isPlaying = false,
-                playingIndex = -1
+                playingIndex = -1,
+                playingTones = emptyList()
             )
         }
     }
@@ -120,11 +123,16 @@ fun FrequencySelectorProducer(
             RangeSelector(
                 onTouchEvent = { uiState = uiState.copy(isTouching = it) },
                 onInputTouch = { tones = it.toTones() },
+                visualPoints = uiState.playingTones.map {
+                    Offset(
+                        ((it.frequency - 20) / (20000 - 20)),
+                        1 - it.amplitude
+                    )
+                }
             )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .onSizeChanged { size = it }
                     .background(Color.Transparent)
             ) {
                 Row(
@@ -176,9 +184,8 @@ fun FrequencySelectorProducer(
                                 }
                             }
                             items(uiState.track.notes[index].tones.size) { subIndex ->
-                                val red = uiState.track.notes[index].tones[subIndex].amplitude
-                                val green =
-                                    uiState.track.notes[index].tones[subIndex].frequency / (20000 - 20)
+                                val red = 1 - uiState.track.notes[index].tones[subIndex].amplitude
+                                val green = (uiState.track.notes[index].tones[subIndex].frequency - 20) / (20000 - 20)
                                 Button(
                                     modifier = Modifier
                                         .padding(3.dp, 0.dp)

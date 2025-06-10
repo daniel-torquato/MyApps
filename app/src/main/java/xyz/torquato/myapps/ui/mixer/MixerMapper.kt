@@ -9,8 +9,8 @@ fun InputTouch.toTones(): List<Tone> = touchList.map { point ->
     val freqRange = (scale.endInclusive - scale.start)
     val freqStart = scale.start
     Tone(
-        frequency = (point.y / size.height) * freqRange + freqStart,
-        amplitude = (point.x / size.width)
+        frequency = (point.x / size.width) * freqRange + freqStart,
+        amplitude = (1 - point.y / size.height)
     )
 }
 
