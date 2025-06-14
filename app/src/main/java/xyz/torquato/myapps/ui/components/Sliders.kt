@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import org.intellij.lang.annotations.Language
 import xyz.torquato.myapps.ui.mixer.model.InputTouch
 
+
 @Language("AGSL")
 val CUSTOM_SHADER = """
     const float M_PI = 3.1415926535897932384626433832795;
@@ -39,23 +40,36 @@ val CUSTOM_SHADER = """
     uniform float2 center;
     uniform float start;
     
-    half4 main(in float2 fragCoord) {
+    half4 get_wave(half4 color, float2 uv) {
         float maxDimension = max(resolution.x, resolution.y);
-        float2 uv = fragCoord/maxDimension;
-        
         float factor = 0;
         float2 centerUV = center / maxDimension;
         float2 diff = centerUV - uv;
         float r = sqrt(diff.x * diff.x + diff.y * diff.y);
+    
         factor = (1.0 + sin(r * 80 * M_PI)) / 2.0;
         
-        if (r > start)
+         if (r > start) {
             factor = 0;
+         }
+    
+        return color; //+ half4(factor, factor, factor, 1.0);
+    }
+    
+    half4 get_color(float r, float2 uv) {
         
-        return half4(uv.y, uv.x, factor, 1.0);
+        half4 color = half4(1.0 - uv.x, uv.y, uv.x, 1.0);
+       
+        return color;
+    }
+    
+    half4 main(in float2 fragCoord) {
+        float maxDimension = max(resolution.x, resolution.y);
+        float2 uv = fragCoord / maxDimension;
+        
+        return get_wave(get_color(start, uv), uv);
     }
 """.trimIndent()
-
 @Composable
 fun RangeSelector(
     onTouchEvent: (Boolean) -> Unit,
@@ -118,7 +132,7 @@ fun RangeSelector(
                     pointMode = PointMode.Points,
                     cap = StrokeCap.Round,
                     color = Color.Blue,
-                    strokeWidth = 30f
+                    strokeWidth = 50f
                 )
             }
             .pointerInput(Unit) {

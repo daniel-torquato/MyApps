@@ -14,9 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -30,7 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import xyz.torquato.myapps.ui.components.AddButton
 import xyz.torquato.myapps.ui.components.RangeSelector
 import xyz.torquato.myapps.ui.components.TextButton
@@ -67,8 +73,26 @@ fun FrequencySelectorProducer(
 
     LaunchedEffect(tones, uiState.isTouching) {
         println("MyTag: Touching $tones")
-        if (uiState.isTouching) {
+        if (uiState.isTouching && !uiState.isEditing && tones.isNotEmpty()) {
+            uiState = uiState.copy(currentTone = tones.first())
             onTouch(tones)
+        } else if (uiState.isEditing && tones.isNotEmpty()) {
+            val notes = uiState.track.notes.toMutableList()
+            val noteIndex = uiState.editingIndex.first
+            val toneIndex = uiState.editingIndex.second
+            val note = notes.getOrNull(noteIndex)
+            val oldTones = note?.tones?.toMutableList()
+            val oldTone = oldTones?.getOrNull(toneIndex)
+            val newTone = tones.firstOrNull()
+            if (oldTone != null && newTone != null) {
+                oldTones[toneIndex] = newTone
+                notes[noteIndex] = note.copy(oldTones)
+            }
+            uiState = uiState.copy(
+                track = uiState.track.copy(notes = notes),
+                editingIndex = -1 to -1,
+                isEditing = false
+            )
         } else {
             onPause()
         }
@@ -116,6 +140,25 @@ fun FrequencySelectorProducer(
         }
     }
 
+    LaunchedEffect(uiState.isEditing, uiState.editingIndex) {
+        println("MyTag: editing ${uiState.isEditing}")
+        if (uiState.isEditing && uiState.track.notes.isNotEmpty()) {
+            val note = uiState.track.notes.getOrNull(uiState.editingIndex.first)
+            val tone = note?.tones?.getOrNull(uiState.editingIndex.second)
+            println("MyTag; $tone")
+            uiState = tone?.let {
+                uiState.copy(
+                    playingTones = listOf(it),
+                    currentTone = it
+                )
+            } ?: uiState
+        } else {
+            uiState = uiState.copy(
+                playingTones = emptyList()
+            )
+        }
+    }
+
     Surface(
         modifier = Modifier
     ) {
@@ -135,26 +178,19 @@ fun FrequencySelectorProducer(
                     .fillMaxSize()
                     .background(Color.Transparent)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    TextButton(
-                        onClick = { uiState = uiState.copy(isRecording = true) },
-                        containerColor = if (uiState.isRecording) Color.Red else Color.Green,
-                        text = "Record"
-                    )
-                    TextButton(
-                        onClick = { uiState = uiState.copy(isSaving = true) },
-                        containerColor = if (uiState.isSaving) Color.Red else Color.Green,
-                        text = "Save"
-                    )
-                    TextButton(
-                        onClick = { uiState = uiState.copy(isPlaying = true) },
-                        containerColor = if (uiState.isPlaying) Color.Blue else Color.Green,
-                        text = "Play"
-                    )
-                }
+                AvailableOptions(
+                    isSaving = uiState.isSaving,
+                    onSaving = { uiState = uiState.copy(isSaving = true) },
+                    isEditing = uiState.isEditing,
+                    onEditing = { uiState = uiState.copy(
+                        playingTones = listOf(it)
+                    ) },
+                    tone = uiState.currentTone,
+                    isRecording = uiState.isRecording,
+                    onRecording = { uiState = uiState.copy(isRecording = true) },
+                    onPlaying = { uiState = uiState.copy(isPlaying = true) },
+                    isPlaying = uiState.isPlaying
+                )
 
                 LazyColumn(
                     modifier = Modifier
@@ -198,13 +234,18 @@ fun FrequencySelectorProducer(
                                         disabledContainerColor = Color.Transparent,
                                         disabledContentColor = Color.Transparent
                                     ),
-                                    onClick = {}
+                                    onClick = {
+                                        println("MyTag: Editing $index $subIndex")
+                                        uiState = uiState.copy(
+                                            editingIndex = index to subIndex,
+                                            isEditing = true
+                                        )
+                                    }
                                 ) {}
                             }
 
                         }
                         Row {
-
                             Text(
                                 modifier = Modifier
                                     .fillMaxWidth(0.3f)
@@ -252,6 +293,89 @@ fun FrequencySelectorProducer(
     }
 }
 
+
+@Composable
+fun AvailableOptions(
+    isPlaying: Boolean,
+    onPlaying: () -> Unit,
+    isEditing: Boolean,
+    onEditing: (Tone) -> Unit,
+    tone: Tone,
+    isSaving: Boolean,
+    onSaving: () -> Unit,
+    isRecording: Boolean,
+    onRecording: () -> Unit
+) {
+    var frequencyText by remember { mutableStateOf<String>("${tone.frequency}") }
+    var amplitudeText by remember { mutableStateOf<String>("${tone.amplitude}") }
+
+    LaunchedEffect(tone) {
+        println("MyTag: $tone")
+        frequencyText = "${tone.frequency}"
+        amplitudeText = "${tone.amplitude}"
+    }
+
+    LaunchedEffect(frequencyText, amplitudeText) {
+        val freq = frequencyText.toFloatOrNull()
+        val ampl = amplitudeText.toFloatOrNull()
+        if (freq != null && ampl != null) {
+            onEditing(Tone(freq, ampl))
+        }
+    }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        TextButton(
+            onClick = onRecording,
+            containerColor = if (isRecording) Color.Red else Color.Green,
+            text = "Record"
+        )
+        TextButton(
+            onClick = onSaving,
+            containerColor = if (isSaving) Color.Red else Color.Green,
+            text = "Save"
+        )
+        TextButton(
+            onClick = onPlaying,
+            containerColor = if (isPlaying) Color.Blue else Color.Green,
+            text = "Play"
+        )
+        Column {
+            BasicTextField(
+                value = "%.3f".format(amplitudeText.toFloatOrNull() ?: 0),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
+                modifier = Modifier.width(100.dp),
+                textStyle = LocalTextStyle.current.copy(
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.End
+                ),
+                onValueChange = {
+                    amplitudeText = it
+                }
+            )
+            BasicTextField(
+                value = "%.3f".format(frequencyText.toFloatOrNull() ?: 0),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
+                modifier = Modifier.width(100.dp),
+                textStyle = LocalTextStyle.current.copy(
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.End
+                ),
+                onValueChange = {
+                    frequencyText = it
+                }
+            )
+        }
+    }
+}
 
 
 
