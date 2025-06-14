@@ -38,8 +38,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import xyz.torquato.myapps.ui.components.AddButton
+import xyz.torquato.myapps.ui.components.ElementButton
 import xyz.torquato.myapps.ui.components.RangeSelector
 import xyz.torquato.myapps.ui.components.TextButton
+import xyz.torquato.myapps.ui.components.model.MyIcons
 import xyz.torquato.myapps.ui.mixer.model.MixerUiState
 import xyz.torquato.myapps.ui.mixer.model.Note
 import xyz.torquato.myapps.ui.mixer.model.Tone
@@ -325,24 +327,35 @@ fun AvailableOptions(
 
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.End
     ) {
-        TextButton(
-            onClick = onRecording,
-            containerColor = if (isRecording) Color.Red else Color.Green,
-            text = "Record"
-        )
-        TextButton(
-            onClick = onSaving,
-            containerColor = if (isSaving) Color.Red else Color.Green,
-            text = "Save"
-        )
-        TextButton(
-            onClick = onPlaying,
-            containerColor = if (isPlaying) Color.Blue else Color.Green,
-            text = "Play"
-        )
-        Column {
+        Row {
+            ElementButton(
+                onClick = onRecording,
+                isWaiting = isRecording,
+                icon = MyIcons.RECORD
+            )
+            ElementButton(
+                onClick = onSaving,
+                isWaiting = isSaving,
+                icon = MyIcons.SAVE
+            )
+            ElementButton(
+                onClick = onPlaying,
+                isWaiting = isPlaying,
+                icon = MyIcons.PLAY
+            )
+            ElementButton(
+                onClick = {
+                    println("MyTag: Click")
+                },
+                isWaiting = isEditing,
+                icon = MyIcons.EDIT
+            )
+        }
+        Column(
+            modifier = Modifier.padding(end = 10.dp)
+        ) {
             BasicTextField(
                 value = "%.3f".format(amplitudeText.toFloatOrNull() ?: 0),
                 keyboardOptions = KeyboardOptions(
