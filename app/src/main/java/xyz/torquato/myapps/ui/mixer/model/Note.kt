@@ -7,7 +7,7 @@ data class Note(
     companion object {
         fun empty() = Note(
             tones = emptyList(),
-            duration = 300L
+            duration = 250L
         )
     }
 }

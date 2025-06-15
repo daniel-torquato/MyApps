@@ -11,7 +11,7 @@ data class MixerUiState(
     val track: Track,
     val playingIndex: Int,
     val playingTones: List<Tone>,
-    val editingIndex: Pair<Int, Int>
+    val editingIndex: Pair<Int, Int>,
 ) {
 
     companion object {

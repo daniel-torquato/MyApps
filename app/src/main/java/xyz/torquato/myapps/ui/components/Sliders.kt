@@ -65,7 +65,7 @@ val CUSTOM_SHADER = """
     
     half4 main(in float2 fragCoord) {
         float maxDimension = max(resolution.x, resolution.y);
-        float2 uv = fragCoord / maxDimension;
+        float2 uv = fragCoord / resolution;
         
         return get_wave(get_color(start, uv), uv);
     }
@@ -108,8 +108,11 @@ fun RangeSelector(
         modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth()
-            .aspectRatio(1f)
-            .onSizeChanged { size = it }
+            .aspectRatio(2f)
+            .onSizeChanged {
+                println("MyTag: New Size $it")
+                size = it
+            }
             .drawBehind {
                 shader.setFloatUniform(
                     "resolution",

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -29,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -39,8 +42,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import xyz.torquato.myapps.ui.components.AddButton
 import xyz.torquato.myapps.ui.components.ElementButton
+import xyz.torquato.myapps.ui.components.MusicalKeyboard
 import xyz.torquato.myapps.ui.components.RangeSelector
-import xyz.torquato.myapps.ui.components.TextButton
+import xyz.torquato.myapps.ui.components.ScaleButton
 import xyz.torquato.myapps.ui.components.model.MyIcons
 import xyz.torquato.myapps.ui.mixer.model.MixerUiState
 import xyz.torquato.myapps.ui.mixer.model.Note
@@ -175,6 +179,74 @@ fun FrequencySelectorProducer(
                     )
                 }
             )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                val scaleSize = 40
+                val scaleModifier = Modifier.padding(2.dp).size(scaleSize.dp)
+                ScaleButton(
+                    modifier = scaleModifier,
+                    onPress = {},
+                    onRelease = {},
+                    power = -3
+                )
+                ScaleButton(
+                    modifier = scaleModifier,
+                    onPress = {},
+                    onRelease = {},
+                    power = -2
+                )
+                ScaleButton(
+                    modifier = scaleModifier,
+                    onPress = {},
+                    onRelease = {},
+                    power = -1
+                )
+                ScaleButton(
+                    modifier = scaleModifier,
+                    onPress = {},
+                    onRelease = {},
+                    power = 0
+                )
+                ScaleButton(
+                    modifier = scaleModifier,
+                    onPress = {},
+                    onRelease = {},
+                    power = 1
+                )
+                ScaleButton(
+                    modifier = scaleModifier,
+                    onPress = {},
+                    onRelease = {},
+                    power = 2
+                )
+                ScaleButton(
+                    modifier = scaleModifier,
+                    onPress = {},
+                    onRelease = {},
+                    power = 3
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                MusicalKeyboard(
+                    onPress = {
+                        tones = listOf(Tone(amplitude = 0.8f, frequency = it.frequency))
+                        uiState = uiState.copy(
+                            isTouching = true,
+                        )
+                    },
+                    onRelease = {
+                        uiState = uiState.copy(
+                            isTouching = false
+                        )
+                        tones = emptyList()
+                    }
+                )
+            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -294,7 +366,6 @@ fun FrequencySelectorProducer(
         }
     }
 }
-
 
 @Composable
 fun AvailableOptions(
