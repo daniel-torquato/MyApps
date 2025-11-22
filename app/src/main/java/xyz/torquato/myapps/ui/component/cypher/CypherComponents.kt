@@ -13,6 +13,10 @@ fun CypherComponent(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    CypherProducer(uiState)
+    CypherProducer(
+        uiState,
+        onChangeToken = viewModel::changeToken,
+        onChangeMessage = viewModel::changeMessage
+    )
 
 }

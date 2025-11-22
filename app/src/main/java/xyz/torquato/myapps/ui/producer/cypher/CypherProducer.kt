@@ -1,15 +1,20 @@
 package xyz.torquato.myapps.ui.producer.cypher
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,17 +28,61 @@ import xyz.torquato.myapps.ui.component.cypher.model.CypherUiState
 
 @Composable
 fun CypherProducer(
-    uiState: CypherUiState
+    uiState: CypherUiState,
+    onChangeToken: (String) -> Unit,
+    onChangeMessage: (String) -> Unit,
 ) {
-    Row(
+
+    var message by remember { mutableStateOf("")}
+    var token by remember { mutableStateOf("")}
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(30.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.Top,
+            .padding(10.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
         BasicTextField(
+            value = uiState.message,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number
+            ),
+            textStyle = LocalTextStyle.current.copy(
+                color = Color.White,
+                fontSize = 18.sp,
+                textAlign = TextAlign.Center
+            ),
+            onValueChange = {}
+        )
+
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = token,
+            label = {
+              Text(text = "R")
+            },
+            onValueChange = {
+                token = it
+                onChangeToken(it)
+            },
+        )
+
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = message,
+            label = {
+                Text(text = "Message")
+            },
+            onValueChange = {
+                message = it
+                onChangeMessage(it)
+            },
+        )
+
+        BasicTextField(
+            modifier  = Modifier.padding(10.dp),
             value = uiState.message,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
@@ -53,5 +102,9 @@ fun CypherProducer(
 fun CypherPreview(
     uiState: CypherUiState = CypherUiState("example")
 ) {
-    CypherProducer(uiState)
+    CypherProducer(
+        uiState,
+        onChangeToken = {},
+        onChangeMessage = {}
+    )
 }
