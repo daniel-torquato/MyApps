@@ -4,7 +4,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import xyz.torquato.myapps.api.sound.ICypherRepository
 import xyz.torquato.myapps.api.sound.ISoundRepository
+import xyz.torquato.myapps.data.cypher.CypherRepository
 import xyz.torquato.myapps.data.waves.SoundRepository
 
 @Module
@@ -13,5 +15,8 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindImpl(impl: SoundRepository): ISoundRepository
+
+    @Binds
+    abstract fun bindCypherImpl(impl: CypherRepository): ICypherRepository
 
 }

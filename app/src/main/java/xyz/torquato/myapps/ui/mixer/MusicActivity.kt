@@ -17,16 +17,14 @@ class MusicActivity : ComponentActivity() {
     @Inject
     lateinit var soundRepository: ISoundRepository
 
-    @Inject
-    lateinit var viewMode: MixerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         println("MyTag: Music Mixer Created")
-        soundRepository.start()
+
         setContent {
             MyAppsTheme {
-                FrequencySelector(viewModel = viewMode)
+                FrequencySelector()
             }
         }
     }
@@ -34,6 +32,11 @@ class MusicActivity : ComponentActivity() {
     override fun getOnBackInvokedDispatcher(): OnBackInvokedDispatcher {
         println("MyTag Back Pressed")
         return super.getOnBackInvokedDispatcher()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        soundRepository.start()
     }
 
     override fun onDestroy() {

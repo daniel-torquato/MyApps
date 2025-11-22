@@ -26,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.createGraph
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.Serializable
+import xyz.torquato.myapps.ui.activities.CypherActivity
 import xyz.torquato.myapps.ui.activities.EngineActivity
 import xyz.torquato.myapps.ui.mixer.MusicActivity
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
@@ -46,6 +47,10 @@ sealed interface ScreenRoute {
 
     @Serializable
     data object Engine: ScreenRoute
+
+    @Serializable
+    data object Cypher: ScreenRoute
+
 }
 
 @AndroidEntryPoint
@@ -59,7 +64,8 @@ class MenuActivity : ComponentActivity() {
                 SetupNavigator(navController)
                 Menu(
                     onMixerSelected = { navController.navigate(ScreenRoute.Home) },
-                    onGameSelected = { navController.navigate(ScreenRoute.Engine) }
+                    onGameSelected = { navController.navigate(ScreenRoute.Engine) },
+                    onCypherSelected = { navController.navigate(ScreenRoute.Cypher)}
                 )
             }
         }
@@ -88,40 +94,31 @@ fun SetupNavigator(
             activityClass = EngineActivity::class
         }
 
+        activity<ScreenRoute.Cypher> {
+            label = "Game"
+            activityClass = CypherActivity::class
+        }
+
         composable<ScreenRoute.Menu> {
             Menu(
                 onMixerSelected = { navController.navigate(ScreenRoute.FrequencySelector) },
-                onGameSelected = { navController.navigate(ScreenRoute.Engine) }
+                onGameSelected = { navController.navigate(ScreenRoute.Engine) },
+                onCypherSelected = { navController.navigate(ScreenRoute.Cypher)}
             )
         }
 
-        composable<ScreenRoute.None> { }
+        composable<ScreenRoute.None> {
+
+        }
     }
 }
 
 @Composable
 fun Menu(
     onMixerSelected: () -> Unit,
-    onGameSelected: () -> Unit
+    onGameSelected: () -> Unit,
+    onCypherSelected:  () -> Unit
 ) {
-  //  Column(
-  //      modifier = Modifier.fillMaxSize().padding(30.dp),
-  //      horizontalAlignment = Alignment.CenterHorizontally
-  //  ) {
-  //      Row(
-  //          modifier = Modifier.fillMaxSize(),
-  //          verticalAlignment = Alignment.CenterVertically
-  //      ) {
-  //          Button(onClick = onGameSelected, shape = RectangleShape) {
-  //              Text("Open Game", color = Color.Red)
-  //          }
-  //          Button(onClick = onMixerSelected, shape = RectangleShape) {
-  //              Text("Frequency Mixer", color = Color.Blue)
-  //          }
-//
-  //      }
-  //  }
-
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -149,6 +146,17 @@ fun Menu(
                 shape = RoundedCornerShape(20)
             ) {
                 Text("Mixer", color = Color.Blue)
+            }
+        }
+        item {
+            Button(
+                onClick = onCypherSelected,
+                modifier = Modifier.size(100.dp),
+                contentPadding = PaddingValues(10.dp),
+                elevation = ButtonDefaults.buttonElevation(10.dp),
+                shape = RoundedCornerShape(20)
+            ) {
+                Text("Cypher", color = Color.Blue)
             }
         }
     }

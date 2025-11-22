@@ -40,6 +40,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import xyz.torquato.myapps.ui.components.AddButton
 import xyz.torquato.myapps.ui.components.ElementButton
 import xyz.torquato.myapps.ui.components.MusicalKeyboard
@@ -55,7 +56,7 @@ import xyz.torquato.myapps.ui.mixer.model.Track
 @SuppressLint("ReturnFromAwaitPointerEventScope")
 @Composable
 fun FrequencySelector(
-    viewModel: MixerViewModel
+    viewModel: MixerViewModel = hiltViewModel()
 ) {
     FrequencySelectorProducer(
         onTrackPlay = viewModel::play,
