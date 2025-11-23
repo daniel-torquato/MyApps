@@ -1,19 +1,23 @@
 #ifndef __INFINITY_MATH__
 #define __INFINITY_MATH__
-#include <string>
+#include <object.h>
+#include <vector>
 
-class InfNumber {
-	private:
-		std::string slots;
-	public:
-		InfNumber(unsigned int x);
-		InfNumber(const std::string &x);
-        void set(unsigned int slot, char value);
-        std::string get();
+class InfNumber : Object {
+private:
+    std::vector<unsigned char> slots;
+public:
+    InfNumber(unsigned int x);
+
+    InfNumber(const std::vector<unsigned char> &x);
+
+    void set(unsigned int slot, unsigned char value);
+
+    InfNumber operator+(const InfNumber& v);
+
+    std::vector<unsigned char> get();
+
+    std::string toString() override;
 };
-
-//std::ostream& operator<<(std::ostream &os, const InfNumber &word) {
-//	return os;
-//}
 
 #endif

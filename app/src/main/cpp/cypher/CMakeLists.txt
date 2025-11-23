@@ -27,11 +27,11 @@ project("${ProjectId}")
 # System.loadLibrary() and pass the name of the library defined here;
 # for GameActivity/NativeActivity derived applications, the same library name must be
 # used in the AndroidManifest.xml file.
-include_directories(inc)
+include_directories(inc src/utils)
 
 add_library(${PROJECT_NAME} SHARED
     # List C/C++ source files with relative paths to this CMakeLists.txt.
-        cypher.cpp src/impl/infmath.cpp)
+        cypher.cpp src/impl/infmath.cpp src/utils/StringUtil.hpp)
 
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
