@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import xyz.torquato.myapps.api.sound.ICypherRepository
 import javax.inject.Inject
+import kotlin.toUByte
 
 class CypherRepository @Inject constructor() : ICypherRepository {
 
