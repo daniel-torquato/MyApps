@@ -22,12 +22,12 @@ public:
         unsigned char low = (value & 0xf0) >> 4;
         unsigned char high = value & 0x0f;
 
-        __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "PRE %x %x %x", low, high, value);
+       // __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "PRE %x %x %x", low, high, value);
 
         buffer[0] = fromUByte(low);
         buffer[1] = fromUByte(high);
 
-        __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "POS %x %x %x", value, buffer[0], buffer[1]);
+      //  __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "POS %x %x %x", value, buffer[0], buffer[1]);
 
         return buffer;
     }

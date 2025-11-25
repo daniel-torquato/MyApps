@@ -31,7 +31,7 @@ include_directories(inc src/utils)
 
 add_library(${PROJECT_NAME} SHARED
     # List C/C++ source files with relative paths to this CMakeLists.txt.
-        cypher.cpp src/impl/infmath.cpp src/utils/StringUtil.hpp)
+        cypher.cpp src/impl/infmath.cpp)
 
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this

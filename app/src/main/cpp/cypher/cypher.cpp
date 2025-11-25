@@ -7,6 +7,7 @@
 #include <vector>
 #include <infmath.h>
 #include <StringUtil.hpp>
+#include <CypherUtil.hpp>
 
 #define jni_prefix(func) Java ## _xyz_torquato_myapps ## _data_cypher_CypherRepository ## _ ## func
 
@@ -27,11 +28,17 @@ jni_prefix(entry)(
     InfNumber converter( StringUtil::fromString(str_token));
     InfNumber second( StringUtil::fromString(str_message));
 
+     InfNumber tmp = CypherUtil::poly1305(converter, second);
+
+   // InfNumber tmp = CypherUtil::reduce(converter);
+
     __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "CONVERTER %s", converter.toString().c_str());
     __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "SUM %s", (converter + second).toString().c_str());
+    __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "MULT %s", (converter * second).toString().c_str());
+    __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "CYPHER %s", tmp.toString().c_str());
 
 
-    return env->NewStringUTF((str_token + str_message).c_str());
+    return env->NewStringUTF(tmp.toString().c_str());
 }
 
 

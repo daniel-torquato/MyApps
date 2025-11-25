@@ -9,7 +9,7 @@
 
 class Object {
 public:
-    virtual std::string toString() = 0;
+    virtual std::string toString() const = 0;
 };
 
 #endif // __OBJECT_H__
