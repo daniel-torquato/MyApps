@@ -1,17 +1,18 @@
-#ifndef _INFINITY_MATH_
-#define _INFINITY_MATH_
+#ifndef INFINITY_MATH
+#define INFINITY_MATH
 #include <object.h>
 #include <vector>
 
 class InfNumber : Object {
 private:
+    const static uint MAX_SIZE = 17;
     std::vector<u_char> slots;
 public:
-    InfNumber(uint x);
+    explicit InfNumber(uint x);
 
     InfNumber(const InfNumber& v);
 
-    InfNumber(const std::vector<u_char> &x);
+    explicit InfNumber(const std::vector<u_char> &x);
 
     void set(uint slot, u_char value);
 
@@ -38,6 +39,9 @@ public:
 
     [[nodiscard]]
     std::string toString() const override;
+
+    [[nodiscard]]
+    std::string toBuffer() const;
 };
 
 #endif

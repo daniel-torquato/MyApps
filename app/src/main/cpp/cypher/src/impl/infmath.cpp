@@ -5,18 +5,18 @@
 #include <android/log.h>
 
 InfNumber::InfNumber(unsigned int x) {
-    slots = std::vector<unsigned char>(x, '\0');
+    slots = std::vector<u_char>(x, '\0');
 }
 
 InfNumber::InfNumber(const InfNumber& v) {
     slots = std::vector<u_char>(v.slots);
 }
 
-InfNumber::InfNumber(const std::vector<unsigned char> &x) {
+InfNumber::InfNumber(const std::vector<u_char> &x) {
     slots = x;
 }
 
-std::vector<unsigned char> InfNumber::get() {
+std::vector<u_char> InfNumber::get() {
     return slots;
 }
 
@@ -79,12 +79,6 @@ InfNumber InfNumber::operator+(const InfNumber &v) {
     if (carry != 0)
         buffer.slots.emplace_back(carry);
 
-   // __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "OUT %s", buffer.toString().c_str());
-   // __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "SIZE BIG %d=%d", big_slot->slots.size(),
-   //                     max_size);
-   // __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "SIZE SMALL %d=%d", small_slot->slots.size(),
-   //                     min_size);
-
     return buffer;
 }
 
@@ -126,6 +120,17 @@ std::string InfNumber::toString() const {
     return buffer;
 }
 
+std::string InfNumber::toBuffer() const {
+    int last_id = (int) (slots.size() >= MAX_SIZE ? MAX_SIZE : slots.size()) - 1;
+    std::string buffer(2 * (last_id + 1), '0');
+    for (int i = last_id; i >= 0; --i) {
+        std::string tmp = StringUtil::convertToChar(slots[last_id - i]);
+        buffer[2 * i + 0] = tmp[0];
+        buffer[2 * i + 1] = tmp[1];
+    }
+    return buffer;
+}
+
 
 void InfNumber::clean() {
     uint s;
@@ -138,9 +143,9 @@ void InfNumber::clean() {
 }
 
 void InfNumber::clean(uint s) {
-    __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "CLEAN %d", s);
-
     slots.resize(s);
+
+    __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "CLEAN %d", s);
 }
 
 bool InfNumber::operator==(const InfNumber &v) {
@@ -154,6 +159,7 @@ bool InfNumber::operator==(const InfNumber &v) {
 // TODO: Create shift-right to enable division.
 InfNumber InfNumber::operator>>(uint n) {
     InfNumber ret(slots);
+
 
     if (0 < n && n < 8) {
         const uint8_t block = (1 << n);

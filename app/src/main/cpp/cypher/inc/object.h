@@ -9,6 +9,7 @@
 
 class Object {
 public:
+    [[nodiscard]]
     virtual std::string toString() const = 0;
 };
 

@@ -30,15 +30,13 @@ jni_prefix(entry)(
 
      InfNumber tmp = CypherUtil::poly1305(converter, second);
 
-   // InfNumber tmp = CypherUtil::reduce(converter);
-
     __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "CONVERTER %s", converter.toString().c_str());
     __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "SUM %s", (converter + second).toString().c_str());
     __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "MULT %s", (converter * second).toString().c_str());
     __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "CYPHER %s", tmp.toString().c_str());
 
 
-    return env->NewStringUTF(tmp.toString().c_str());
+    return env->NewStringUTF(tmp.toBuffer().c_str());
 }
 
 

@@ -13,7 +13,9 @@ public:
         InfNumber h(0u);
         InfNumber tmp(0u);
 
-        for (slot = 0; slot <= (m.size() + 1) / 16; ++slot) {
+        __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "POLY1 %s %s", r.toString().c_str(), m.toString().c_str());
+
+        for (slot = 0; slot < (m.size() + 1) / 16; ++slot) {
             InfNumber c(0);
             for (j = 0; j < 16 && j < m.size(); ++j) {
                 c.set(j, m.get(slot * 16 + j));
@@ -33,7 +35,7 @@ public:
 
             tmp = reduce(tmp);
 
-            __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "PARTIAL4 %d %s", slot, tmp.toString().c_str());
+            __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "PARTIAL4 %d %s", slot, tmp.toBuffer().c_str());
 
             h = tmp;
         }
