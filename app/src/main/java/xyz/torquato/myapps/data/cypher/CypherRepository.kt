@@ -1,5 +1,6 @@
 package xyz.torquato.myapps.data.cypher
 
+import androidx.annotation.VisibleForTesting
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import xyz.torquato.myapps.api.sound.ICypherRepository
@@ -16,6 +17,9 @@ class CypherRepository @Inject constructor() : ICypherRepository {
     override val message = _message.asStateFlow()
 
     private external fun entry(token: String, message: String): String
+
+
+
 
     override fun setMessage(newMessage: String) {
         lastMessage = newMessage

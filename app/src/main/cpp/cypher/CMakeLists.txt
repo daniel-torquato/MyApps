@@ -33,6 +33,10 @@ add_library(${PROJECT_NAME} SHARED
     # List C/C++ source files with relative paths to this CMakeLists.txt.
         cypher.cpp src/impl/infmath.cpp)
 
+add_library(${PROJECT_NAME}_test SHARED
+        # List C/C++ source files with relative paths to this CMakeLists.txt.
+        cypher_tester.cpp src/impl/infmath.cpp)
+
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
 # build script, prebuilt third-party libraries, or Android system libraries.
@@ -40,3 +44,8 @@ target_link_libraries(${PROJECT_NAME}
     # List libraries link to the target library
     android
     log)
+
+target_link_libraries(${PROJECT_NAME}_test
+        # List libraries link to the target library
+        android
+        log)
