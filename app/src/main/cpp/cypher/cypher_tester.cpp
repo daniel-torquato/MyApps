@@ -52,3 +52,20 @@ jni_prefix(times)(
 
     return env->NewStringUTF(tmp.toBuffer().c_str());
 }
+
+extern "C"
+JNIEXPORT jstring JNICALL
+jni_prefix(converter)(
+        JNIEnv *env,
+        jobject _this,
+        jstring token
+) {
+
+    std::string str_token = env->GetStringUTFChars(token, nullptr);
+
+    std::vector<u_char> buffer = StringUtil::toBuffer(str_token);
+
+    std::string output = StringUtil::toString(buffer);
+
+    return env->NewStringUTF(output.c_str());
+}

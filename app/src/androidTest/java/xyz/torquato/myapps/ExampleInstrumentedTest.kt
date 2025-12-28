@@ -47,6 +47,16 @@ class ExampleInstrumentedTest {
         assertEquals("3f23", result)
     }
 
+    @Test
+    fun when_given_then_4() {
+        val input1 = "c208"
+
+        val result = CypherTester.converter(input1)
+
+        assertEquals("c208", result)
+    }
+
+
 
 }
 

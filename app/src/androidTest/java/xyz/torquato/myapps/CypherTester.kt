@@ -7,6 +7,7 @@ object CypherTester {
 
     external fun times(token: String, message: String): String
 
+    external fun converter(token: String): String
 
     init {
         System.loadLibrary("cypher_test")
