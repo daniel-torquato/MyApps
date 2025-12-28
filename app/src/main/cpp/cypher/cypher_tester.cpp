@@ -25,8 +25,8 @@ jni_prefix(sum)(
     std::string str_token = env->GetStringUTFChars(token, nullptr);
     std::string str_message = env->GetStringUTFChars(message, nullptr);
 
-    InfNumber converter( StringUtil::fromString(str_token));
-    InfNumber second( StringUtil::fromString(str_message));
+    InfNumber converter( StringUtil::toBuffer(str_token));
+    InfNumber second( StringUtil::toBuffer(str_message));
 
     InfNumber tmp = converter + second;
 
@@ -45,10 +45,47 @@ jni_prefix(times)(
     std::string str_token = env->GetStringUTFChars(token, nullptr);
     std::string str_message = env->GetStringUTFChars(message, nullptr);
 
-    InfNumber converter( StringUtil::fromString(str_token));
-    InfNumber second( StringUtil::fromString(str_message));
+    InfNumber converter( StringUtil::toBuffer(str_token));
+    InfNumber second( StringUtil::toBuffer(str_message));
 
     InfNumber tmp = converter * second;
+
+    return env->NewStringUTF(tmp.toBuffer().c_str());
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+jni_prefix(mod)(
+        JNIEnv *env,
+        jobject _this,
+        jstring input,
+        jstring divisor
+) {
+
+    std::string str_token = env->GetStringUTFChars(input, nullptr);
+    std::string str_message = env->GetStringUTFChars(divisor, nullptr);
+
+    InfNumber converter( StringUtil::toBuffer(str_token));
+    InfNumber second( StringUtil::toBuffer(str_message));
+
+    InfNumber tmp = converter % second;
+
+    return env->NewStringUTF(tmp.toBuffer().c_str());
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+jni_prefix(neg)(
+        JNIEnv *env,
+        jobject _this,
+        jstring input
+) {
+
+    std::string str_token = env->GetStringUTFChars(input, nullptr);
+
+    InfNumber converter( StringUtil::toBuffer(str_token));
+
+    InfNumber tmp = -converter;
 
     return env->NewStringUTF(tmp.toBuffer().c_str());
 }

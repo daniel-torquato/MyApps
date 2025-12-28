@@ -35,6 +35,7 @@ public:
     InfNumber operator*(const InfNumber& v);
     InfNumber operator%(const InfNumber& v);
     InfNumber operator>>(uint n);
+    InfNumber operator-();
     bool operator==(const InfNumber& v);
 
     [[nodiscard]]

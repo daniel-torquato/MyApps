@@ -179,3 +179,19 @@ InfNumber InfNumber::operator>>(uint n) {
     return ret;
 }
 
+InfNumber InfNumber::operator-() {
+    InfNumber ret(slots.size());
+
+    u_char carry = 1;
+    for (int i = 0; i < slots.size(); ++i) {
+        int tmp = ~slots[i] + carry;
+
+        ret.slots[i] = tmp % 256;
+        carry = tmp / 256;
+    }
+    if (carry != 0)
+        ret.slots.emplace_back(carry);
+
+    return ret;
+}
+

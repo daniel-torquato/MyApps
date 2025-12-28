@@ -7,6 +7,10 @@ object CypherTester {
 
     external fun times(token: String, message: String): String
 
+    external fun neg(token: String): String
+
+    external fun mod(input: String, divisor: String): String
+
     external fun converter(token: String): String
 
     init {

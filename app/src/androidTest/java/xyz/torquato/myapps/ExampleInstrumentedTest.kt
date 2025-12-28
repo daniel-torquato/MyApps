@@ -39,12 +39,31 @@ class ExampleInstrumentedTest {
 
     @Test
     fun when_given_then_3() {
-        val input1 = "c208"
-        val input2 = "6136"
+        val input1 = "08c2"
+        val input2 = "3661"
 
         val result = CypherTester.sum(input1, input2)
 
         assertEquals("3f23", result)
+    }
+
+    @Test
+    fun when_given_then_3_0() {
+        val input1 = "08c2"
+        val input2 = "f73d"
+
+        val result = CypherTester.sum(input1, input2)
+
+        assertEquals("ffff", result)
+    }
+
+    @Test
+    fun when_given_then_3_1() {
+        val input1 = "08c2"
+
+        val result = CypherTester.neg(input1)
+
+        assertEquals("f73e", result)
     }
 
     @Test
@@ -56,6 +75,26 @@ class ExampleInstrumentedTest {
         assertEquals("c208", result)
     }
 
+
+    @Test
+    fun when_given_then_6() {
+        val input1 = "08c2"
+        val input2 = "3661"
+
+        val result = CypherTester.times(input1, input2)
+
+        assertEquals("01dc3d82", result)
+    }
+
+    @Test
+    fun when_given_then_7() {
+        val input1 = "08c2"
+        val input2 = "3661"
+
+        val result = CypherTester.mod(input2, input1)
+
+        assertEquals("01d5", result)
+    }
 
 
 }
