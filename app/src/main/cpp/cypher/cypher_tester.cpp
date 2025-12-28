@@ -15,7 +15,7 @@
 
 extern "C"
 JNIEXPORT jstring JNICALL
-jni_prefix(entry)(
+jni_prefix(sum)(
         JNIEnv *env,
         jobject _this,
         jstring token,
@@ -25,18 +25,30 @@ jni_prefix(entry)(
     std::string str_token = env->GetStringUTFChars(token, nullptr);
     std::string str_message = env->GetStringUTFChars(message, nullptr);
 
-    __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "INPUT %s %s", str_token.c_str(), str_message.c_str());
+    InfNumber converter( StringUtil::fromString(str_token));
+    InfNumber second( StringUtil::fromString(str_message));
+
+    InfNumber tmp = converter + second;
+
+    return env->NewStringUTF(tmp.toBuffer().c_str());
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+jni_prefix(times)(
+        JNIEnv *env,
+        jobject _this,
+        jstring token,
+        jstring message
+) {
+
+    std::string str_token = env->GetStringUTFChars(token, nullptr);
+    std::string str_message = env->GetStringUTFChars(message, nullptr);
 
     InfNumber converter( StringUtil::fromString(str_token));
     InfNumber second( StringUtil::fromString(str_message));
 
-    InfNumber tmp = CypherUtil::poly1305(converter, second);
-
-    __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "CONVERTER %s", converter.toString().c_str());
-    __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "SUM %s", (converter + second).toString().c_str());
-    __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "MULT %s", (converter * second).toString().c_str());
-    __android_log_print(ANDROID_LOG_DEBUG, "MyTag", "CYPHER %s", tmp.toString().c_str());
-
+    InfNumber tmp = converter * second;
 
     return env->NewStringUTF(tmp.toBuffer().c_str());
 }

@@ -2,7 +2,10 @@ package xyz.torquato.myapps
 
 object CypherTester {
 
-    external fun entry(token: String, message: String): String
+
+    external fun sum(token: String, message: String): String
+
+    external fun times(token: String, message: String): String
 
 
     init {
