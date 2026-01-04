@@ -13,6 +13,8 @@ object CypherTester {
 
     external fun converter(token: String): String
 
+    external fun input(token: String): String
+
     init {
         System.loadLibrary("cypher_test")
     }

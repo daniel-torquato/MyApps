@@ -1,11 +1,13 @@
 #ifndef INFINITY_MATH
 #define INFINITY_MATH
 #include <object.h>
+#include <slot.h>
 #include <vector>
 
 class InfNumber : Object {
 private:
     const static uint MAX_SIZE = 17;
+    std::vector<slot> _slots;
     std::vector<u_char> slots;
 public:
     explicit InfNumber(uint x);

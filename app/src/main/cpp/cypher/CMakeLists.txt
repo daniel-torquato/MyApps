@@ -31,11 +31,11 @@ include_directories(inc src/utils)
 
 add_library(${PROJECT_NAME} SHARED
     # List C/C++ source files with relative paths to this CMakeLists.txt.
-        cypher.cpp src/impl/infmath.cpp)
+        cypher.cpp src/impl/infmath.cpp src/impl/slot.cpp)
 
 add_library(${PROJECT_NAME}_test SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
-        cypher_tester.cpp src/impl/infmath.cpp)
+        cypher_tester.cpp src/impl/infmath.cpp src/impl/slot.cpp)
 
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this

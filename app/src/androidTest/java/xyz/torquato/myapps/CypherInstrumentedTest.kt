@@ -20,17 +20,17 @@ class CypherInstrumentedTest {
 
         val result = CypherTester.sum(input1, input2)
 
-        assertEquals("3f23", result)
+        assertEquals("01233e", result)
     }
 
     @Test
-    fun when_given_then_3() {
-        val input1 = "08c2"
-        val input2 = "3661"
+    fun when_given_then_input() {
+        val input1 = "c208"
+        val input2 = "6136"
 
         val result = CypherTester.sum(input1, input2)
 
-        assertEquals("3f23", result)
+        assertEquals("01233e", result)
     }
 
     @Test
@@ -80,6 +80,15 @@ class CypherInstrumentedTest {
         val result = CypherTester.mod(input2, input1)
 
         assertEquals("01d5", result)
+    }
+
+    @Test
+    fun when_given_then_input_2() {
+        val input2 = "3f62"
+
+        val result = CypherTester.input(input2)
+
+        assertEquals("00003f62", result)
     }
 
 
