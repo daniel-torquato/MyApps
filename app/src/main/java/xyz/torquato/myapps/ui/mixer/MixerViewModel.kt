@@ -2,6 +2,7 @@ package xyz.torquato.myapps.ui.mixer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -11,11 +12,10 @@ import xyz.torquato.myapps.ui.mixer.model.Tone
 import xyz.torquato.myapps.ui.mixer.model.Track
 import javax.inject.Inject
 
+@HiltViewModel
 class MixerViewModel @Inject constructor(
     private val soundRepository: ISoundRepository
 ) : ViewModel() {
-
-    private val _uiState: MutableStateFlow<Note> = MutableStateFlow(Note.empty())
 
     fun add(frequency: Float, amplitude: Float) {
         soundRepository.setTone(frequency, amplitude)

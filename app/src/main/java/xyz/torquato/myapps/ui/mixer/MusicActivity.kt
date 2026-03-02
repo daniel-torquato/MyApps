@@ -7,7 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
+import xyz.torquato.myapps.api.math.IMathRepository
 import xyz.torquato.myapps.api.sound.ISoundRepository
+import xyz.torquato.myapps.data.math.MathRepository
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
 import javax.inject.Inject
 
@@ -18,15 +20,15 @@ class MusicActivity : ComponentActivity() {
     lateinit var soundRepository: ISoundRepository
 
     @Inject
-    lateinit var viewMode: MixerViewModel
+    lateinit var mathRepository: IMathRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         println("MyTag: Music Mixer Created")
-        soundRepository.start()
+
         setContent {
             MyAppsTheme {
-                FrequencySelector(viewModel = viewMode)
+                FrequencySelector()
             }
         }
     }
@@ -34,6 +36,11 @@ class MusicActivity : ComponentActivity() {
     override fun getOnBackInvokedDispatcher(): OnBackInvokedDispatcher {
         println("MyTag Back Pressed")
         return super.getOnBackInvokedDispatcher()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        soundRepository.start()
     }
 
     override fun onDestroy() {
