@@ -18,6 +18,12 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        externalNativeBuild {
+            cmake {
+                arguments.add("-DANDROID_STL=c++_shared")
+            }
+        }
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -76,6 +82,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.room.runtime)
+    implementation(libs.thirdparty.openssl)
+    implementation(libs.thirdparty.curl)
     ksp(libs.room.compiler)
     ksp(libs.dagger.hilt.compiler)
 }
