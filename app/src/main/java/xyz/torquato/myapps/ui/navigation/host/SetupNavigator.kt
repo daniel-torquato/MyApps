@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import xyz.torquato.myapps.ui.activities.CypherActivity
 import xyz.torquato.myapps.ui.activities.EngineActivity
+import xyz.torquato.myapps.ui.activities.WebActivity
 import xyz.torquato.myapps.ui.menu.model.MenuUiState
 import xyz.torquato.myapps.ui.menu.view.Menu
 import xyz.torquato.myapps.ui.mixer.MusicActivity
@@ -20,11 +21,6 @@ fun SetupNavigator(
         navController = navController,
         startDestination = ScreenRoute.Menu
     ) {
-        activity<ScreenRoute.Home> {
-            label = "Music"
-            activityClass = MusicActivity::class
-        }
-
         activity<ScreenRoute.Home> {
             label = "Music"
             activityClass = MusicActivity::class
@@ -45,6 +41,11 @@ fun SetupNavigator(
             activityClass = CypherActivity::class
         }
 
+        activity<ScreenRoute.Web> {
+            label = "Cypher"
+            activityClass = WebActivity::class
+        }
+
         composable<ScreenRoute.Menu> {
             Menu(
                 uiState = MenuUiState(
@@ -62,6 +63,11 @@ fun SetupNavigator(
                         MenuUiState.MenuEntry(
                             title = "Cypher",
                             destination = ScreenRoute.Cypher,
+                            isSelected = false
+                        ),
+                        MenuUiState.MenuEntry(
+                            title = "Web",
+                            destination = ScreenRoute.Web,
                             isSelected = false
                         )
                     )

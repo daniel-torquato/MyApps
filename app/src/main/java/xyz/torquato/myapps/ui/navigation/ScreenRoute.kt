@@ -18,4 +18,7 @@ sealed interface ScreenRoute {
 
     @Serializable
     data object Cypher: ScreenRoute
+
+    @Serializable
+    data object Web: ScreenRoute
 }
