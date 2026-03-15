@@ -18,6 +18,8 @@ room-version = "2.7.1"
 dagger-hilt = "2.57.1"
 androidx-hilt = "1.3.0"
 ksp = "2.0.21-1.0.27"
+glide = "4.16.0"
+glide-compose = "1.0.0-beta07"
 
 curl = "7.85.0-beta-1"
 openssl = "1.1.1q-beta-1"
@@ -58,6 +60,8 @@ thirdparty-openssl = { group = "com.android.ndk.thirdparty", name = "openssl", v
 thirdparty-jsoncpp = { group = "com.android.ndk.thirdparty", name = "jsoncpp", version.ref = "jsoncpp" }
 thirdparty-gtest = { group = "com.android.ndk.thirdparty", name = "googletest", version.ref = "gtest" }
 
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide"}
+glide-compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide-compose"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

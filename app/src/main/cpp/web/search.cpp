@@ -6,19 +6,23 @@
 #include <curl/curl.h>
 
 
-#define jni_prefix(func) Java ## _xyz_torquato_myapps ## _data_web_WebRepository ## _ ## func
+#define jni_prefix(func) Java ## _xyz_torquato_myapps ## _data_web_WebDataSource ## _ ## func
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *userp);
+
 void queryBook(const std::string &query, int maxResults, int startIndex, std::string *result);
 
 void setJSONCallback(JNIEnv *env, jobject dataSource, jobject jsonData, jobject error);
+
 jobject createJSON(JNIEnv *env, jobject rawJSON);
+
 jobject createJSONException(JNIEnv *env, jstring message);
+
 jobject stringToJString(JNIEnv *env, const std::string &str);
 
 extern "C"
-JNIEXPORT void JNICALL
-jni_prefix(Search)(
+JNIEXPORT jobject JNICALL
+jni_prefix(search)(
         JNIEnv *env,
         jobject _this,
         jstring query,
@@ -34,14 +38,20 @@ jni_prefix(Search)(
         std::string result;
         std::string queryString = env->GetStringUTFChars(query, nullptr);
         queryBook(queryString, maxResults, startIndex, &result);
-        jobject _result = stringToJString(env, result);
-        bookItem = createJSON(env, _result);
-    } catch (const std::exception& e) {
+        if (!result.empty()) {
+            jobject _result = stringToJString(env, result);
+            bookItem = createJSON(env, _result);
+        }
+    } catch (const std::exception &e) {
         error = createJSONException(env, env->NewStringUTF(e.what()));
     }
-    setJSONCallback(env, _this, bookItem, error);
+    jobject ret = bookItem != nullptr ? bookItem : error;
+    __android_log_print(ANDROID_LOG_ERROR, "MyTag", "JNI result %p", ret);
+    return bookItem != nullptr ? bookItem : error;
+    //setJSONCallback(env, _this, bookItem, error);
 }
 
+/*
 void
 setJSONCallback(
         JNIEnv *env,
@@ -56,7 +66,7 @@ setJSONCallback(
 
     env->CallVoidMethod(dataSource, setId, jsonData, error);
 }
-
+*/
 
 jobject
 createJSON(
@@ -95,18 +105,24 @@ queryBook(
 ) {
 
     CURL *curl = curl_easy_init();
-    if (curl) {
+    if (curl && !query.empty() && maxResults > 0) {
         std::string url = std::string("https://www.googleapis.com/books/v1/volumes?q=") +
                           query +
                           std::string("&maxResults=") +
                           std::to_string(maxResults) +
                           std::string("&startIndex=") + std::to_string(startIndex);
+
+        __android_log_print(ANDROID_LOG_ERROR, "MyTag", "URL %s", url.c_str());
+
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, result);
 
         CURLcode res = curl_easy_perform(curl);
+
+        __android_log_print(ANDROID_LOG_ERROR, "MyTag", "Code %d", res);
+        __android_log_print(ANDROID_LOG_ERROR, "MyTag", "Result %zu", result->length());
 
         if (res != CURLE_OK)
             *result = std::string(R"({"error":"Failed to fetch data"})");

@@ -70,20 +70,26 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     implementation(libs.androidx.hilt.viewmodel.compose)
     implementation(libs.androidx.hilt.navigation.compose)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.games.activity)
     implementation(libs.androidx.navigation)
     implementation(libs.kotlinx.serialization)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.room.runtime)
     implementation(libs.thirdparty.openssl)
     implementation(libs.thirdparty.curl)
+    implementation(libs.glide.compose)
+    //implementation(libs.coil.network.okhttp)
+
+    testImplementation(libs.junit)
+
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+
     ksp(libs.room.compiler)
     ksp(libs.dagger.hilt.compiler)
 }
