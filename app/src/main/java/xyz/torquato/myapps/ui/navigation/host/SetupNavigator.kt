@@ -42,7 +42,7 @@ fun SetupNavigator(
         }
 
         activity<ScreenRoute.Web> {
-            label = "Cypher"
+            label = "Web"
             activityClass = WebActivity::class
         }
 
