@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
-import xyz.torquato.myapps.ui.component.web.view.WebComponent
+import xyz.torquato.myapps.ui.component.web.navigation.host.WebEntry
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
 
 @AndroidEntryPoint
@@ -15,7 +15,7 @@ class WebActivity : ComponentActivity() {
         println("MyTag: Music Mixer Created")
         setContent {
             MyAppsTheme {
-                WebComponent()
+                WebEntry.Handler()
             }
         }
     }

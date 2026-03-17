@@ -11,5 +11,17 @@ data class BookMenuUiState(
         var smallThumbnailUrl: String,
         var largeThumbnailUrl: String,
         var buyLink: String?
-    )
+    ) {
+        companion object {
+            fun empty() = BookItem(
+                id = "",
+                title = "",
+                author = "",
+                description = "",
+                smallThumbnailUrl = "",
+                largeThumbnailUrl = "",
+                buyLink = null
+            )
+        }
+    }
 }

@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -12,19 +14,33 @@ import org.json.JSONArray
 import org.json.JSONObject
 import xyz.torquato.myapps.api.web.model.QueryResult
 import xyz.torquato.myapps.domain.web.GetBooksUseCase
-import xyz.torquato.myapps.domain.web.SetQueryUseCase
-import xyz.torquato.myapps.domain.web.SetSelectedBookUseCase
+import xyz.torquato.myapps.domain.web.GetSelectedBookUseCase
 import xyz.torquato.myapps.ui.component.web.model.BookMenuUiState
 import javax.inject.Inject
 
 @HiltViewModel
-class WebViewModel @Inject constructor(
+class WebFullDescriptionViewModel @Inject constructor(
     private val getBooksUseCase: GetBooksUseCase,
-    private val setQueryUseCase: SetQueryUseCase,
-    private val setSelectedBookUseCase: SetSelectedBookUseCase
+    private val getSelectedBookUseCase: GetSelectedBookUseCase
 ): ViewModel() {
 
-    val uiState: StateFlow<BookMenuUiState> = getBooksUseCase.invoke().map {
+    val uiState: StateFlow<BookMenuUiState.BookItem> = combine(
+        getBookContentMapped(),
+        getSelectedBookUseCase().onEach {
+            println("MyTag: SELECTED $it")
+        }
+    ) { books, selectedBookId ->
+       val selectedBook = books.content.firstOrNull { it.id == selectedBookId }
+        selectedBook
+    }.filterNotNull().onEach {
+        println("MyTag: New Ui State ${it}")
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = BookMenuUiState.BookItem.empty()
+    )
+
+    private fun getBookContentMapped() = getBooksUseCase.invoke().map {
         println("MyTag: New Content ${it}")
         when(it) {
             is QueryResult.Valid -> {
@@ -76,15 +92,8 @@ class WebViewModel @Inject constructor(
             }
             else -> { BookMenuUiState(emptyList())}
         }
-    }.onEach {
-        println("MyTag: New Ui State ${it.content}")
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = BookMenuUiState(emptyList())
-    )
+    }
 
-    fun setQuery(query: String) = setQueryUseCase(query)
 
-    fun selectBook(id: String) = setSelectedBookUseCase(id)
+
 }
