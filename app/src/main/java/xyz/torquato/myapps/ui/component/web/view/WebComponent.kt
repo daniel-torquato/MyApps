@@ -1,22 +1,27 @@
 package xyz.torquato.myapps.ui.component.web.view
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.ScrollScope
+import androidx.compose.foundation.gestures.TargetedFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -60,11 +65,15 @@ object WebPrev {
     ) {
         val uiState by viewModel.uiState.collectAsState()
 
-        Provider(uiState, viewModel::setQuery) { id ->
-            println("Mytag: Book Selected $id")
-            viewModel.selectBook(id)
-            router.openDescription()
-        }
+        Provider(
+            uiState, viewModel::setQuery,
+            { id ->
+                println("MyTag: Book Selected $id")
+                viewModel.selectBook(id)
+                router.openDescription()
+            },
+            onMoreItems = viewModel::getMoreItems
+        )
     }
 
     class Router(
@@ -76,12 +85,14 @@ object WebPrev {
         }
     }
 
+    @SuppressLint("FlowOperatorInvokedInComposition")
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
     @Composable
     fun Provider(
         uiState: BookMenuUiState,
         onQuery: (String) -> Unit,
-        onBookSelected: (String) -> Unit
+        onBookSelected: (String) -> Unit,
+        onMoreItems: () -> Unit
     ) {
         var message by remember {
             mutableStateOf(
@@ -92,6 +103,8 @@ object WebPrev {
             )
         }
 
+
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -99,6 +112,13 @@ object WebPrev {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            val pageSize = 4
+            val pagerState = rememberPagerState {
+                val contentSize = uiState.content.size
+                val count = (contentSize / pageSize)
+                count + 1 - (pageSize - (contentSize % pageSize)) / pageSize
+            }
+
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = message,
@@ -117,13 +137,47 @@ object WebPrev {
                 }
             )
 
-            Box {
+            val fling = object : TargetedFlingBehavior {
+                override suspend fun ScrollScope.performFling(
+                    initialVelocity: Float,
+                    onRemainingDistanceUpdated: (Float) -> Unit
+                ): Float = 0f
+            }
+
+
+            LaunchedEffect(pagerState.currentPage) {
+                if (pagerState.currentPage == pagerState.pageCount -1) {
+                    onMoreItems()
+                }
+            }
+
+
+            VerticalPager(
+                state = pagerState,
+                flingBehavior = fling
+            ) { pageIndex ->
+
+                LaunchedEffect(pagerState.currentPage) {
+                    if (pagerState.currentPage == pagerState.pageCount - 1) {
+                        println("MyTag: new $pageIndex ${pagerState.currentPage} ${pagerState.pageCount}")
+                    } else {
+                        println("MyTag: old $pageIndex ${pagerState.currentPage} ${pagerState.pageCount}")
+                    }
+                }
+
                 LazyVerticalGrid(
                     modifier = Modifier
                         .fillMaxSize(),
                     columns = GridCells.Fixed(2)
                 ) {
-                    items(uiState.content, key = { it.id }) { bookItem ->
+
+                    items(
+                        if (uiState.content.size > pageSize * (pageIndex + 1))
+                            pageSize
+                        else
+                            (uiState.content.size - pageSize * pageIndex),
+                        key = { uiState.content[it + pageIndex * pageSize].id }) { itemIndex ->
+                        val bookItem = uiState.content[itemIndex + pageIndex * pageSize]
                         GlideImage(
                             modifier = Modifier
                                 .padding(5.dp)
@@ -135,9 +189,11 @@ object WebPrev {
                             failure = placeholder(R.drawable.ic_launcher_foreground)
                         )
                     }
+
                 }
             }
         }
+
     }
 }
 
@@ -171,7 +227,8 @@ fun GreetingPreview() {
                 )
             ),
             onQuery = {},
-            onBookSelected = {}
+            onBookSelected = {},
+            onMoreItems = {}
         )
     }
 }

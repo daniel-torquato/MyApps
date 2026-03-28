@@ -8,7 +8,9 @@ import xyz.torquato.myapps.api.web.IWebRepository
 import xyz.torquato.myapps.api.web.model.QueryRequest
 import xyz.torquato.myapps.api.web.model.QueryResult
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class WebRepository @Inject constructor(
     private val dataSource: WebDataSource
 ): IWebRepository {

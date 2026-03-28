@@ -4,14 +4,16 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import xyz.torquato.myapps.api.pagging.IPagingRepository
 import xyz.torquato.myapps.api.web.ILocalWebRepository
 import xyz.torquato.myapps.api.web.IQueryRepository
 import xyz.torquato.myapps.api.web.IWebRepository
-import xyz.torquato.myapps.data.web.QueryRepository
-import xyz.torquato.myapps.data.web.WebRepository
-import xyz.torquato.myapps.domain.web.GetBooksUseCase
+import xyz.torquato.myapps.api.web.cache.IWebCacheRepository
 import xyz.torquato.myapps.domain.web.GetSelectedBookUseCase
 import xyz.torquato.myapps.domain.web.SetSelectedBookUseCase
+import xyz.torquato.myapps.domain.web.content.GetBooksUseCase
+import xyz.torquato.myapps.domain.web.content.GetCacheBooksUseCase
+import xyz.torquato.myapps.domain.web.pagging.GetNextPageUseCase
 import javax.inject.Singleton
 
 @Module
@@ -22,10 +24,22 @@ object DomainWebModule {
     @Provides
     fun provideGetBooksUseCase(
         queryRepository: IQueryRepository,
-        webRepository: IWebRepository
+        webRepository: IWebRepository,
+        pagingRepository: IPagingRepository,
+        webCacheRepository: IWebCacheRepository
     ): GetBooksUseCase = GetBooksUseCase(
         queryRepository,
-        webRepository
+        webRepository,
+        pagingRepository,
+        webCacheRepository
+    )
+
+    @Singleton
+    @Provides
+    fun provideGetCacheBooksUseCase(
+        webCacheRepository: IWebCacheRepository
+    ): GetCacheBooksUseCase = GetCacheBooksUseCase(
+        webCacheRepository
     )
 
     @Singleton
@@ -42,5 +56,15 @@ object DomainWebModule {
         repository: ILocalWebRepository
     ): SetSelectedBookUseCase = SetSelectedBookUseCase(
         repository
+    )
+
+    @Singleton
+    @Provides
+    fun provideGetNextPageUseCase(
+       repository: IPagingRepository,
+       queryRepository: IQueryRepository
+    ): GetNextPageUseCase = GetNextPageUseCase(
+        repository,
+        queryRepository
     )
 }
