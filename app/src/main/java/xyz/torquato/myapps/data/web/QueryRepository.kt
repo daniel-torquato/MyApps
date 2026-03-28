@@ -1,24 +1,24 @@
 package xyz.torquato.myapps.data.web
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import xyz.torquato.myapps.api.web.IQueryRepository
-import xyz.torquato.myapps.api.web.model.QueryRequest
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class QueryRepository @Inject constructor(
-    private val dataSource: QueryDataSource,
+    private val dataSource: QueryDataSource
 ): IQueryRepository {
 
-    override val queryRequest: Flow<QueryRequest> = combine(
-        dataSource.query,
-        dataSource.start,
-        dataSource.length,
-        ::QueryRequest
-    )
+    override val queryRequest: Flow<String> = dataSource.query.also {
+        println("MyTag: [R] UPDATE ${hashCode()}")
+    }
 
-    override fun setQuery(request: QueryRequest) {
-        println("MyTag: Repo $request")
-        dataSource.setAll(request.query, request.start, request.length)
+    override fun getLast(): String = dataSource.query.value.also {
+        println("MyTag: [R] CURRENT ${hashCode()}")
+    }
+
+    override fun setQuery(request: String) {
+        dataSource.setAll(request)
     }
 }

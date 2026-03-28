@@ -12,15 +12,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import xyz.torquato.myapps.R
 import xyz.torquato.myapps.ui.component.web.WebFullDescriptionViewModel
 import xyz.torquato.myapps.ui.component.web.model.BookMenuUiState
-import xyz.torquato.myapps.ui.component.web.navigation.host.WebNavigator
-import xyz.torquato.myapps.ui.component.web.navigation.host.WebRoute
 
 object WebFullDescription {
 
@@ -58,7 +55,5 @@ object WebFullDescription {
             )
         }
     }
-
-
 
 }

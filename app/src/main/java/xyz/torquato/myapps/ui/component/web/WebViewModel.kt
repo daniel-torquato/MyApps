@@ -8,12 +8,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import org.json.JSONArray
-import org.json.JSONObject
-import xyz.torquato.myapps.api.web.model.QueryResult
-import xyz.torquato.myapps.domain.web.GetBooksUseCase
 import xyz.torquato.myapps.domain.web.SetQueryUseCase
 import xyz.torquato.myapps.domain.web.SetSelectedBookUseCase
+import xyz.torquato.myapps.domain.web.content.GetBooksUseCase
+import xyz.torquato.myapps.domain.web.pagging.GetNextPageUseCase
+import xyz.torquato.myapps.ui.component.web.model.BookMenuMapper.toUiState
 import xyz.torquato.myapps.ui.component.web.model.BookMenuUiState
 import javax.inject.Inject
 
@@ -21,61 +20,13 @@ import javax.inject.Inject
 class WebViewModel @Inject constructor(
     private val getBooksUseCase: GetBooksUseCase,
     private val setQueryUseCase: SetQueryUseCase,
-    private val setSelectedBookUseCase: SetSelectedBookUseCase
+    private val setSelectedBookUseCase: SetSelectedBookUseCase,
+    private val getNextPageUseCase: GetNextPageUseCase
 ): ViewModel() {
 
-    val uiState: StateFlow<BookMenuUiState> = getBooksUseCase.invoke().map {
-        println("MyTag: New Content ${it}")
-        when(it) {
-            is QueryResult.Valid -> {
-
-                val pullString: JSONObject.(String) -> String = { id ->
-                    runCatching { getString(id) }.getOrNull().orEmpty()
-                }
-
-                val fillString: JSONObject?.(String) -> String = { id ->
-                    this?.pullString(id).orEmpty()
-                }
-
-                val pullObject: JSONObject.(String) -> JSONObject? = { id ->
-                    runCatching { getJSONObject(id) }.getOrNull()
-                }
-
-                val pullArray: JSONObject.(String) -> JSONArray? = { id ->
-                    runCatching { getJSONArray(id) }.getOrNull()
-                }
-                val result = mutableListOf<BookMenuUiState.BookItem>()
-
-                val items = it.data.pullArray("items")
-                if (items != null) {
-                    repeat(items.length()) { index ->
-                        val element = items.getJSONObject(index)
-
-
-                        val volumeInfo = element.pullObject("volumeInfo")
-
-                        val imageInfo = volumeInfo?.pullObject("imageLinks")
-
-                        val saleInfo = element.pullObject("saleInfo")
-
-                        val item = BookMenuUiState.BookItem(
-                            id = element.pullString("id"),
-                            title = volumeInfo.fillString("title"),
-                            author = volumeInfo.fillString("authors"),
-                            description = volumeInfo.fillString("description"),
-                            smallThumbnailUrl = imageInfo.fillString("smallThumbnail"),
-                            largeThumbnailUrl = imageInfo.fillString("thumbnail"),
-                            buyLink = saleInfo.fillString("saleability")
-                                .takeIf { saleability -> saleability == "FOR_SALE" }
-                                .let { saleInfo.fillString("buyLink") }
-                        )
-                        result.add(item)
-                    }
-                }
-                BookMenuUiState(result.toList())
-            }
-            else -> { BookMenuUiState(emptyList())}
-        }
+    val uiState: StateFlow<BookMenuUiState> = getBooksUseCase.invoke().map { items ->
+        println("MyTag: New Content ${items}")
+        BookMenuUiState(items.toUiState())
     }.onEach {
         println("MyTag: New Ui State ${it.content}")
     }.stateIn(
@@ -87,4 +38,9 @@ class WebViewModel @Inject constructor(
     fun setQuery(query: String) = setQueryUseCase(query)
 
     fun selectBook(id: String) = setSelectedBookUseCase(id)
+
+    fun getMoreItems() {
+        println("MyTag: [VM] GET MORE ITEMS")
+        getNextPageUseCase()
+    }
 }
