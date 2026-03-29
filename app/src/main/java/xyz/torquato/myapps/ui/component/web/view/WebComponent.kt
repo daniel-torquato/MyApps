@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -104,9 +104,9 @@ object WebPrev {
         }
 
 
-
         Column(
             modifier = Modifier
+                .testTag("SEARCH")
                 .fillMaxSize()
                 .padding(20.dp),
             verticalArrangement = Arrangement.Center,
@@ -120,7 +120,9 @@ object WebPrev {
             }
 
             TextField(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .testTag("QUERY_BAR")
+                    .fillMaxWidth(),
                 value = message,
                 singleLine = true,
                 label = {
