@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import xyz.torquato.myapps.ui.menu.model.MenuUiState
@@ -34,12 +35,17 @@ fun Menu(
         items(items = uiState.entries) { (title, entry, isSelected) ->
             Button(
                 onClick = { onSelect(entry) },
-                modifier = Modifier.size(100.dp),
+                modifier = Modifier
+                    .testTag("BUTTON_${title}")
+                    .size(100.dp),
                 contentPadding = PaddingValues(10.dp),
                 elevation = ButtonDefaults.buttonElevation(10.dp),
                 shape = RoundedCornerShape(20)
             ) {
-                Text(title, color = if (isSelected) Color.Red else Color.Blue)
+                Text(
+                    title,
+                    color = if (isSelected) Color.Red else Color.Blue
+                )
             }
         }
     }
@@ -65,6 +71,11 @@ fun GreetingPreview() {
                     MenuUiState.MenuEntry(
                         title = "Cypher",
                         destination = ScreenRoute.Cypher,
+                        isSelected = false
+                    ),
+                    MenuUiState.MenuEntry(
+                        title = "Web",
+                        destination = ScreenRoute.Web,
                         isSelected = false
                     )
                 )
