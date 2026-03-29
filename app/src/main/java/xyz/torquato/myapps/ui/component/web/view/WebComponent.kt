@@ -9,11 +9,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -29,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -125,8 +130,30 @@ object WebPrev {
                     .fillMaxWidth(),
                 value = message,
                 singleLine = true,
+                shape = CircleShape.copy(CornerSize(50.dp)),
                 label = {
                     Text(text = "Search")
+                },
+                leadingIcon = {
+                    Icon(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(R.drawable.add),
+                        contentDescription = ""
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        modifier = Modifier
+                            .clickable(
+                                onClick = {
+                                    message = message.copy(text = "")
+                                    onQuery("")
+                                }
+                            )
+                            .size(20.dp),
+                        painter = painterResource(R.drawable.floppy_disk_solid),
+                        contentDescription = ""
+                    )
                 },
                 textStyle = LocalTextStyle.current.copy(
                     color = Color.White,
@@ -155,6 +182,7 @@ object WebPrev {
 
 
             VerticalPager(
+                modifier = Modifier.fillMaxSize(),
                 state = pagerState,
                 flingBehavior = fling
             ) { pageIndex ->
@@ -203,7 +231,7 @@ object WebPrev {
     device = PIXEL_2
 )
 @Composable
-fun GreetingPreview() {
+fun WebSearchPreview() {
     MyAppsTheme {
         Provider(
             uiState = BookMenuUiState(
