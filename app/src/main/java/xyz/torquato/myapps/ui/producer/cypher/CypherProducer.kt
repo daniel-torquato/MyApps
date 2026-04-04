@@ -77,7 +77,7 @@ fun CypherProducer(
             modifier = Modifier.fillMaxWidth(),
             value = token,
             label = {
-              Text(text = "R")
+              Text(text = "Token")
             },
             keyboardOptions = KeyboardOptions(
                 autoCorrectEnabled = false,

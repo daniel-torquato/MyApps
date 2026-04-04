@@ -211,6 +211,7 @@ object WebPrev {
                         GlideImage(
                             modifier = Modifier
                                 .padding(5.dp)
+                                .testTag("LOADED_IMAGE")
                                 .clickable(onClick = { onBookSelected(bookItem.id) })
                                 .fillMaxWidth(),
                             model = bookItem.smallThumbnailUrl.replace("http", "https"),
