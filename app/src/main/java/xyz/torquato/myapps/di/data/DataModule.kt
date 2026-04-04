@@ -6,11 +6,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import xyz.torquato.myapps.api.math.IMathRepository
 import xyz.torquato.myapps.api.web.ILocalWebRepository
-import xyz.torquato.myapps.api.web.IQueryRepository
 import xyz.torquato.myapps.api.web.cache.IWebCacheRepository
 import xyz.torquato.myapps.data.math.MathRepository
 import xyz.torquato.myapps.data.web.LocalWebRepository
-import xyz.torquato.myapps.data.web.QueryRepository
 import xyz.torquato.myapps.data.web.cache.WebCacheRepository
 import javax.inject.Singleton
 
@@ -28,9 +26,7 @@ abstract class RepositoryModule {
     @Singleton
     abstract fun bindWebCacheImpl(impl: WebCacheRepository): IWebCacheRepository
 
-    @Binds
-    @Singleton
-    abstract fun bindQueryImpl(impl: QueryRepository): IQueryRepository
+
 
     @Binds
     @Singleton

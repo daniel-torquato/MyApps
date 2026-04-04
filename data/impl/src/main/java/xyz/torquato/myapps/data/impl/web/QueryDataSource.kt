@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.data.web
+package xyz.torquato.myapps.data.impl.web
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

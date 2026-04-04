@@ -1,6 +1,6 @@
 package xyz.torquato.myapps.domain.web
 
-import xyz.torquato.myapps.api.web.IQueryRepository
+import xyz.torquato.myaps.domain.api.web.IQueryRepository
 
 class SetQueryUseCase(
     private val queryRepository: IQueryRepository
