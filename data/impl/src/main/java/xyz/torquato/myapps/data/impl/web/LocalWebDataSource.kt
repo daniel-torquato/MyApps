@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.data.web
+package xyz.torquato.myapps.data.impl.web
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
