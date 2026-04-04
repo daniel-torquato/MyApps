@@ -1,5 +1,7 @@
 package xyz.torquato.myapps.ui.mixer.model
 
+import xyz.torquato.myaps.domain.api.sound.model.Tone
+
 data class MixerUiState(
     val isRecording: Boolean,
     val recordingIndex: Int,

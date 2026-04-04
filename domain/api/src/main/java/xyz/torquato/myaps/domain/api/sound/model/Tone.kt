@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.ui.mixer.model
+package xyz.torquato.myaps.domain.api.sound.model
 
 data class Tone (
     val frequency: Float,

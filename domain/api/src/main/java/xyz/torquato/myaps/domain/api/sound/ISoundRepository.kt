@@ -1,6 +1,6 @@
-package xyz.torquato.myapps.api.sound
+package xyz.torquato.myaps.domain.api.sound
 
-import xyz.torquato.myapps.ui.mixer.model.Tone
+import xyz.torquato.myaps.domain.api.sound.model.Tone
 
 interface ISoundRepository {
 

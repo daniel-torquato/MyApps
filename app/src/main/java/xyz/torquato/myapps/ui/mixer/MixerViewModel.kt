@@ -4,12 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import xyz.torquato.myapps.api.sound.ISoundRepository
 import xyz.torquato.myapps.ui.mixer.model.Note
-import xyz.torquato.myapps.ui.mixer.model.Tone
 import xyz.torquato.myapps.ui.mixer.model.Track
+import xyz.torquato.myaps.domain.api.sound.ISoundRepository
+import xyz.torquato.myaps.domain.api.sound.model.Tone
 import javax.inject.Inject
 
 @HiltViewModel
