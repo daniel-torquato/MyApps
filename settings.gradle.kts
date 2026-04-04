@@ -23,3 +23,4 @@ rootProject.name = "MyApps"
 include(":app")
 include(":domain:impl")
 include(":domain:api")
+include(":data:impl")
