@@ -4,22 +4,22 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import xyz.torquato.myapps.api.web.cache.CacheItem
 import xyz.torquato.myapps.api.web.cache.IWebCacheRepository
-import xyz.torquato.myapps.domain.web.content.model.QueryResultCollection
+import xyz.torquato.myapps.api.web.model.BookItem
 import kotlin.collections.map
 
 class GetCacheBooksUseCase(
     val webCacheRepository: IWebCacheRepository
 ) {
 
-    operator fun invoke(): Flow<List<QueryResultCollection.Valid.BookItem>> = webCacheRepository.cache.map {
+    operator fun invoke(): Flow<List<BookItem>> = webCacheRepository.cache.map {
         it.toDomain()
     }
 
-    private fun List<CacheItem>.toDomain(): List<QueryResultCollection.Valid.BookItem> = map {
+    private fun List<CacheItem>.toDomain(): List<BookItem> = map {
         it.toDomain()
     }
 
-    private fun CacheItem.toDomain(): QueryResultCollection.Valid.BookItem = QueryResultCollection.Valid.BookItem(
+    private fun CacheItem.toDomain(): BookItem = BookItem(
         id,
         title,
         author,

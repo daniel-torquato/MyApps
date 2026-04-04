@@ -8,12 +8,11 @@ import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.scan
-import org.json.JSONArray
-import org.json.JSONObject
 import xyz.torquato.myapps.api.web.IQueryRepository
 import xyz.torquato.myapps.api.web.IWebRepository
 import xyz.torquato.myapps.api.web.cache.CacheItem
 import xyz.torquato.myapps.api.web.cache.IWebCacheRepository
+import xyz.torquato.myapps.api.web.model.BookItem
 import xyz.torquato.myapps.api.web.model.QueryRequest
 import xyz.torquato.myapps.api.web.model.QueryResult
 import xyz.torquato.myapps.domain.web.content.model.QueryResultCollection
@@ -27,7 +26,7 @@ class GetBooksUseCase(
 ) {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(): Flow<List<QueryResultCollection.Valid.BookItem>> =
+    operator fun invoke(): Flow<List<BookItem>> =
         queryRepository.queryRequest.onEach {
             println("MyTag: [UC] NEW QUERY $it")
         }.flatMapLatest { query ->
@@ -74,11 +73,11 @@ class GetBooksUseCase(
 
 
 
-    private fun List<QueryResultCollection.Valid.BookItem>.toCache(): List<CacheItem> = map {
+    private fun List<BookItem>.toCache(): List<CacheItem> = map {
         it.toCache()
     }
 
-    private fun QueryResultCollection.Valid.BookItem.toCache(): CacheItem = CacheItem(
+    private fun BookItem.toCache(): CacheItem = CacheItem(
         id,
         title,
         author,
@@ -88,7 +87,7 @@ class GetBooksUseCase(
         buyLink
     )
 
-    private fun QueryResultCollection.toData(): List<QueryResultCollection.Valid.BookItem> = when (this) {
+    private fun QueryResultCollection.toData(): List<BookItem> = when (this) {
         is QueryResultCollection.Valid -> {
             content.map { result -> result.toData() }.reduce { acc, new -> acc + new }
         }
@@ -96,58 +95,13 @@ class GetBooksUseCase(
         else -> emptyList()
     }
 
-    private fun QueryResult.toData(): List<QueryResultCollection.Valid.BookItem> {
+    private fun QueryResult.toData(): List<BookItem> {
         return when(this) {
-            is QueryResult.Valid -> {
-
-                val pullString: JSONObject.(String) -> String = { id ->
-                    runCatching { getString(id) }.getOrNull().orEmpty()
-                }
-
-                val fillString: JSONObject?.(String) -> String = { id ->
-                    this?.pullString(id).orEmpty()
-                }
-
-                val pullObject: JSONObject.(String) -> JSONObject? = { id ->
-                    runCatching { getJSONObject(id) }.getOrNull()
-                }
-
-                val pullArray: JSONObject.(String) -> JSONArray? = { id ->
-                    runCatching { getJSONArray(id) }.getOrNull()
-                }
-                val result = mutableListOf<QueryResultCollection.Valid.BookItem>()
-
-                val items = data.pullArray("items")
-                if (items != null) {
-                    repeat(items.length()) { index ->
-                        val element = items.getJSONObject(index)
-
-
-                        val volumeInfo = element.pullObject("volumeInfo")
-
-                        val imageInfo = volumeInfo?.pullObject("imageLinks")
-
-                        val saleInfo = element.pullObject("saleInfo")
-
-                        val item = QueryResultCollection.Valid.BookItem(
-                            id = element.pullString("id"),
-                            title = volumeInfo.fillString("title"),
-                            author = volumeInfo.fillString("authors"),
-                            description = volumeInfo.fillString("description"),
-                            smallThumbnailUrl = imageInfo.fillString("smallThumbnail"),
-                            largeThumbnailUrl = imageInfo.fillString("thumbnail"),
-                            buyLink = saleInfo.fillString("saleability")
-                                .takeIf { saleability -> saleability == "FOR_SALE" }
-                                .let { saleInfo.fillString("buyLink") }
-                        )
-                        result.add(item)
-                    }
-                }
-                result.toList()
-            }
+            is QueryResult.Valid -> { data }
             else -> {
                 emptyList()
             }
         }
     }
+
 }
