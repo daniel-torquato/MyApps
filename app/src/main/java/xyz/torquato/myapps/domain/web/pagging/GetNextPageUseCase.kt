@@ -1,7 +1,7 @@
 package xyz.torquato.myapps.domain.web.pagging
 
-import xyz.torquato.myapps.api.web.IQueryRepository
 import xyz.torquato.myaps.domain.api.pagging.IPagingRepository
+import xyz.torquato.myaps.domain.api.web.IQueryRepository
 
 class GetNextPageUseCase(
     private val repository: IPagingRepository,

@@ -4,8 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import xyz.torquato.myapps.api.web.IQueryRepository
 import xyz.torquato.myapps.domain.web.SetQueryUseCase
+import xyz.torquato.myaps.domain.api.web.IQueryRepository
 import javax.inject.Singleton
 
 @Module

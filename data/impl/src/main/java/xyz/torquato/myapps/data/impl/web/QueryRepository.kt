@@ -1,7 +1,7 @@
-package xyz.torquato.myapps.data.web
+package xyz.torquato.myapps.data.impl.web
 
 import kotlinx.coroutines.flow.Flow
-import xyz.torquato.myapps.api.web.IQueryRepository
+import xyz.torquato.myaps.domain.api.web.IQueryRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
