@@ -13,8 +13,6 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *use
 
 void queryBook(const std::string &query, int maxResults, int startIndex, std::string *result);
 
-void setJSONCallback(JNIEnv *env, jobject dataSource, jobject jsonData, jobject error);
-
 jobject createJSON(JNIEnv *env, jobject rawJSON);
 
 jobject createJSONException(JNIEnv *env, jstring message);
