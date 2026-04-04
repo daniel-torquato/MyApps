@@ -4,7 +4,7 @@
 #include <android/log.h>
 #include "api/AudioEngine.h"
 
-#define jni_prefix(func) Java ## _xyz_torquato_myapps ## _data_waves_SoundRepository ## _ ## func
+#define jni_prefix(func) Java ## _xyz_torquato_myapps ## _data_impl ## _waves_SoundRepository ## _ ## func
 
 static AudioEngine *audioEngine = new AudioEngine();
 
@@ -29,7 +29,7 @@ jni_prefix(setTones)(JNIEnv *env, jobject _this,  jobjectArray tones) {
 
     if (length >= 0) {
         audioEngine->allocate(length);
-        jclass toneClass = env->FindClass( "xyz/torquato/myapps/ui/mixer/model/Tone");
+        jclass toneClass = env->FindClass( "xyz/torquato/myaps/domain/api/sound/model/Tone");
         jfieldID freqId = env->GetFieldID(toneClass, "frequency", "F");
         jfieldID amplId = env->GetFieldID(toneClass, "amplitude", "F");
 

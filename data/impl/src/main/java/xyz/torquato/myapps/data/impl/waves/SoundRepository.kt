@@ -1,7 +1,7 @@
-package xyz.torquato.myapps.data.waves
+package xyz.torquato.myapps.data.impl.waves
 
-import xyz.torquato.myapps.api.sound.ISoundRepository
-import xyz.torquato.myapps.ui.mixer.model.Tone
+import xyz.torquato.myaps.domain.api.sound.ISoundRepository
+import xyz.torquato.myaps.domain.api.sound.model.Tone
 import javax.inject.Inject
 
 class SoundRepository @Inject constructor() : ISoundRepository {

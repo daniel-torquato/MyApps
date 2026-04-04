@@ -8,8 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
 import xyz.torquato.myapps.api.math.IMathRepository
-import xyz.torquato.myapps.api.sound.ISoundRepository
-import xyz.torquato.myapps.data.math.MathRepository
+import xyz.torquato.myaps.domain.api.sound.ISoundRepository
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
 import javax.inject.Inject
 
