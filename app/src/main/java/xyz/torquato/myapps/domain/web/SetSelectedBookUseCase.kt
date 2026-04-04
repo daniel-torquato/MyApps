@@ -1,6 +1,6 @@
 package xyz.torquato.myapps.domain.web
 
-import xyz.torquato.myapps.api.web.ILocalWebRepository
+import xyz.torquato.myaps.domain.api.web.ILocalWebRepository
 
 class SetSelectedBookUseCase(
     private val repository: ILocalWebRepository

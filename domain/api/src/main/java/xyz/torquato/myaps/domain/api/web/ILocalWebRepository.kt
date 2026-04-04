@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.api.web
+package xyz.torquato.myaps.domain.api.web
 
 import kotlinx.coroutines.flow.Flow
 
