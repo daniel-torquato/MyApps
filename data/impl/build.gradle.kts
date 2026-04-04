@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.symbol.processor)
 }
 
 android {
@@ -56,8 +57,11 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     implementation(libs.thirdparty.openssl)
     implementation(libs.thirdparty.curl)
+    implementation(libs.room.runtime)
     implementation(project(":domain:api"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    ksp(libs.room.compiler)
 }
