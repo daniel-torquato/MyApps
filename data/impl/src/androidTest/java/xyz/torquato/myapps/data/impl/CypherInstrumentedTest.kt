@@ -1,7 +1,7 @@
-package xyz.torquato.myapps
+package xyz.torquato.myapps.data.impl
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.Assert.assertEquals
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -20,7 +20,7 @@ class CypherInstrumentedTest {
 
         val result = CypherTester.sum(input1, input2)
 
-        assertEquals("01233e", result)
+        Assert.assertEquals("01233e", result)
     }
 
     @Test
@@ -30,7 +30,7 @@ class CypherInstrumentedTest {
 
         val result = CypherTester.sum(input1, input2)
 
-        assertEquals("01233e", result)
+        Assert.assertEquals("01233e", result)
     }
 
     @Test
@@ -40,7 +40,7 @@ class CypherInstrumentedTest {
 
         val result = CypherTester.sum(input1, input2)
 
-        assertEquals("ffff", result)
+        Assert.assertEquals("ffff", result)
     }
 
     @Test
@@ -49,7 +49,7 @@ class CypherInstrumentedTest {
 
         val result = CypherTester.neg(input1)
 
-        assertEquals("f73e", result)
+        Assert.assertEquals("f73e", result)
     }
 
     @Test
@@ -58,7 +58,7 @@ class CypherInstrumentedTest {
 
         val result = CypherTester.converter(input1)
 
-        assertEquals("c208", result)
+        Assert.assertEquals("c208", result)
     }
 
 
@@ -69,7 +69,7 @@ class CypherInstrumentedTest {
 
         val result = CypherTester.times(input1, input2)
 
-        assertEquals("01dc3d82", result)
+        Assert.assertEquals("01dc3d82", result)
     }
 
     @Test
@@ -79,7 +79,7 @@ class CypherInstrumentedTest {
 
         val result = CypherTester.mod(input2, input1)
 
-        assertEquals("01d5", result)
+        Assert.assertEquals("01d5", result)
     }
 
     @Test
@@ -88,9 +88,8 @@ class CypherInstrumentedTest {
 
         val result = CypherTester.input(input2)
 
-        assertEquals("00003f62", result)
+        Assert.assertEquals("00003f62", result)
     }
 
 
 }
-

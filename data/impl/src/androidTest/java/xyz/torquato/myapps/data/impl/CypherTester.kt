@@ -1,4 +1,4 @@
-package xyz.torquato.myapps
+package xyz.torquato.myapps.data.impl
 
 object CypherTester {
 
