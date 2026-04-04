@@ -1,14 +1,14 @@
 package xyz.torquato.myapps.ui.component.web.model
 
-import xyz.torquato.myapps.domain.web.content.model.QueryResultCollection
+import xyz.torquato.myapps.api.web.model.BookItem
 
 object BookMenuMapper {
 
-    fun List<QueryResultCollection.Valid.BookItem>.toUiState(): List<BookMenuUiState.BookItem> = map {
+    fun List<BookItem>.toUiState(): List<BookMenuUiState.BookItem> = map {
         it.toUiState()
     }
 
-    fun QueryResultCollection.Valid.BookItem.toUiState(): BookMenuUiState.BookItem =
+    fun BookItem.toUiState(): BookMenuUiState.BookItem =
         BookMenuUiState.BookItem(
             id = id,
             title = title,
