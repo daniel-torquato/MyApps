@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <curl/curl.h>
+#include "secrets/api_key.h"
 
 
 #define jni_prefix(func) Java ## _xyz_torquato_myapps ## _data_web_WebDataSource ## _ ## func
@@ -106,7 +107,7 @@ queryBook(
 
     CURL *curl = curl_easy_init();
     if (curl && !query.empty() && maxResults > 0) {
-        std::string url = std::string("https://www.googleapis.com/books/v1/volumes?q=") +
+        std::string url = std::string(add_key("https://www.googleapis.com/books/v1/volumes?key=<api_key>&q=")) +
                           query +
                           std::string("&maxResults=") +
                           std::to_string(maxResults) +
