@@ -1,15 +1,15 @@
-package xyz.torquato.myapps.data.web
+package xyz.torquato.myapps.data.impl.web
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import xyz.torquato.myapps.api.web.IWebRepository
-import xyz.torquato.myapps.api.web.model.BookError
-import xyz.torquato.myapps.api.web.model.QueryRequest
-import xyz.torquato.myapps.api.web.model.QueryResult
-import xyz.torquato.myapps.api.web.model.BookItem
+import xyz.torquato.myaps.domain.api.web.IWebRepository
+import xyz.torquato.myaps.domain.api.web.model.BookError
+import xyz.torquato.myaps.domain.api.web.model.BookItem
+import xyz.torquato.myaps.domain.api.web.model.QueryRequest
+import xyz.torquato.myaps.domain.api.web.model.QueryResult
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,7 +21,8 @@ class WebRepository @Inject constructor(
     override suspend fun request(queryRequest: QueryRequest): QueryResult =
         withContext(Dispatchers.IO) {
             println("MyTag: New Request $queryRequest")
-            when (val result = dataSource.search(queryRequest.query, queryRequest.start, queryRequest.length)) {
+            when (val result =
+                dataSource.search(queryRequest.query, queryRequest.start, queryRequest.length)) {
                 is JSONObject -> QueryResult.Valid(result.toDomain())
                 is JSONException -> QueryResult.Error(result.toDomain())
                 else -> QueryResult.Empty

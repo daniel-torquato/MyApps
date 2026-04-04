@@ -7,7 +7,7 @@
 #include "secrets/api_key.h"
 
 
-#define jni_prefix(func) Java ## _xyz_torquato_myapps ## _data_web_WebDataSource ## _ ## func
+#define jni_prefix(func) Java ## _xyz_torquato_myapps ## _data_impl ## _web_WebDataSource ## _ ## func
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *userp);
 
