@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.api.pagging
+package xyz.torquato.myaps.domain.api.pagging
 
 import kotlinx.coroutines.flow.Flow
 

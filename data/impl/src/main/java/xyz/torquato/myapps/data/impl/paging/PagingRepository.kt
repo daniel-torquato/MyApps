@@ -2,8 +2,8 @@ package xyz.torquato.myapps.data.impl.paging
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
-import xyz.torquato.myapps.api.pagging.IPagingRepository
-import xyz.torquato.myapps.data.external.PagingDataSource
+import xyz.torquato.myapps.data.impl.external.PagingDataSource
+import xyz.torquato.myaps.domain.api.pagging.IPagingRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 

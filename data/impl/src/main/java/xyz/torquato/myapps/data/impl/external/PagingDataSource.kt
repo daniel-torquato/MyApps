@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.data.external
+package xyz.torquato.myapps.data.impl.external
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
