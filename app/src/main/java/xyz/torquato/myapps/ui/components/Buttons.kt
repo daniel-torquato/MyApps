@@ -3,11 +3,10 @@ package xyz.torquato.myapps.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -24,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.paint
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Path
@@ -32,11 +30,11 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.drawText
-import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import xyz.torquato.myapps.R
@@ -61,25 +59,6 @@ fun AddButton(
             contentDescription = null
         )
     }
-}
-
-@Composable
-fun TextButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    containerColor: Color,
-    text: String
-) {
-    Button(
-        modifier = modifier,
-        onClick = onClick,
-        colors = ButtonColors(
-            contentColor = Color.Transparent,
-            containerColor = containerColor,
-            disabledContainerColor = Color.Red,
-            disabledContentColor = Color.Red
-        )
-    ) { Text(text, color = Color.Black) }
 }
 
 @Composable
@@ -122,9 +101,6 @@ fun ToneButton(
     onRelease: () -> Unit,
     note: MidiNote
 ) {
-    val factor = (note.frequency - 20.0f) / (20000.0f - 20.0f)
-    val color = Color(factor, 0.0f, 1f - factor)
-    val textMeasurer = rememberTextMeasurer(cacheSize = 1)
     val fontSize = 16
     var clickState by remember { mutableStateOf(false) }
 
@@ -184,18 +160,20 @@ fun ToneButton(
                     style = Stroke(width = 6f),
                     color = Color.DarkGray
                 )
-                drawText(
-                    textMeasurer = textMeasurer,
-                    text = note.note,
-                    topLeft = Offset(center.x - (fontSize), center.y + fontSize),
-                    style = TextStyle(
-                        fontSize = fontSize.sp,
-                        color = Color.Black
-                    )
-                )
             },
         contentAlignment = Alignment.Center
-    ) {}
+    ) {
+        Text(
+            modifier = Modifier
+                .offset(0.dp, (fontSize).dp)
+                .testTag("TONE_${note.note}"),
+            text = note.note,
+            style = TextStyle(
+                fontSize = fontSize.sp,
+                color = Color.Black
+            )
+        )
+    }
 }
 
 @Composable
@@ -207,7 +185,6 @@ fun SemiToneButton(
     note: MidiNote
 ) {
     var clickState by remember { mutableStateOf(false) }
-    val textMeasurer = rememberTextMeasurer(cacheSize = 1)
     val fontSize = 16
 
     LaunchedEffect(clickState) {
@@ -243,15 +220,6 @@ fun SemiToneButton(
                     ),
                     color = Color.DarkGray
                 )
-                drawText(
-                    textMeasurer = textMeasurer,
-                    text = note.note,
-                    topLeft = Offset(center.x - (2 * fontSize), fontSize.toFloat()),
-                    style = TextStyle(
-                        fontSize = fontSize.sp,
-                        color = Color.White
-                    )
-                )
             }
             .pointerInput(Unit) {
                 awaitPointerEventScope {
@@ -274,7 +242,17 @@ fun SemiToneButton(
         ,
         contentAlignment = Alignment.Center
     ) {
-       // Text(text = note.note)
+        Text(
+            modifier = Modifier
+                .offset(0.dp, (-fontSize).dp)
+                .testTag("SEMI_TONE_${note.note}"),
+            text = note.note,
+            textAlign = TextAlign.Center,
+            style = TextStyle(
+                fontSize = fontSize.sp,
+                color = Color.White
+            )
+        )
     }
 }
 
@@ -286,8 +264,6 @@ fun ScaleButton(
     power: Int
 ) {
     var clickState by remember { mutableStateOf(false) }
-    val textMeasurer = rememberTextMeasurer(cacheSize = 1)
-    val fontSize = 16
 
     LaunchedEffect(clickState) {
         if (clickState)
