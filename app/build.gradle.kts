@@ -78,7 +78,6 @@ dependencies {
     implementation(libs.thirdparty.openssl)
     implementation(libs.thirdparty.curl)
     implementation(libs.glide.compose)
-    implementation(project(":domain"))
     //implementation(libs.coil.network.okhttp)
 
     testImplementation(libs.junit)
