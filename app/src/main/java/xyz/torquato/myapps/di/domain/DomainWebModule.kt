@@ -6,7 +6,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import xyz.torquato.myapps.api.web.ILocalWebRepository
 import xyz.torquato.myapps.api.web.IQueryRepository
-import xyz.torquato.myapps.api.web.IWebRepository
 import xyz.torquato.myapps.api.web.cache.IWebCacheRepository
 import xyz.torquato.myapps.domain.web.GetSelectedBookUseCase
 import xyz.torquato.myapps.domain.web.SetSelectedBookUseCase
@@ -14,6 +13,7 @@ import xyz.torquato.myapps.domain.web.content.GetBooksUseCase
 import xyz.torquato.myapps.domain.web.content.GetCacheBooksUseCase
 import xyz.torquato.myapps.domain.web.pagging.GetNextPageUseCase
 import xyz.torquato.myaps.domain.api.pagging.IPagingRepository
+import xyz.torquato.myaps.domain.api.web.IWebRepository
 import javax.inject.Singleton
 
 @Module

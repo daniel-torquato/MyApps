@@ -1,6 +1,5 @@
-package xyz.torquato.myapps.data.web
+package xyz.torquato.myapps.data.impl.web
 
-import org.json.JSONObject
 import javax.inject.Inject
 import javax.inject.Singleton
 

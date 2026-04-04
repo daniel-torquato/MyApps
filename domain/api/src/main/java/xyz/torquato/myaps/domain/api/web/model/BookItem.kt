@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.api.web.model
+package xyz.torquato.myaps.domain.api.web.model
 
 data class BookItem(
     var id: String,

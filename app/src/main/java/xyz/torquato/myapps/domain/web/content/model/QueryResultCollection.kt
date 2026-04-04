@@ -1,6 +1,6 @@
 package xyz.torquato.myapps.domain.web.content.model
 
-import xyz.torquato.myapps.api.web.model.QueryResult
+import xyz.torquato.myaps.domain.api.web.model.QueryResult
 
 sealed interface QueryResultCollection {
 

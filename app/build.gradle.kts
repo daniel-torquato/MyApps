@@ -75,8 +75,6 @@ dependencies {
     implementation(libs.androidx.navigation)
     implementation(libs.kotlinx.serialization)
     implementation(libs.room.runtime)
-    implementation(libs.thirdparty.openssl)
-    implementation(libs.thirdparty.curl)
     implementation(libs.glide.compose)
     // TODO remove data di from app
     implementation(project(":data:di"))

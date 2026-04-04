@@ -1,6 +1,6 @@
 package xyz.torquato.myapps.ui.component.web.model
 
-import xyz.torquato.myapps.api.web.model.BookItem
+import xyz.torquato.myaps.domain.api.web.model.BookItem
 
 object BookMenuMapper {
 

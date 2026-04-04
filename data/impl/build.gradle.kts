@@ -12,7 +12,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        externalNativeBuild {
+            cmake {
+                arguments.add("-DANDROID_STL=c++_shared")
+            }
+        }
     }
+
 
     buildTypes {
         release {
@@ -36,6 +43,10 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    buildFeatures {
+        prefab = true
+    }
 }
 
 dependencies {
@@ -43,6 +54,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.dagger.hilt.android)
+    implementation(libs.thirdparty.openssl)
+    implementation(libs.thirdparty.curl)
     implementation(project(":domain:api"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
