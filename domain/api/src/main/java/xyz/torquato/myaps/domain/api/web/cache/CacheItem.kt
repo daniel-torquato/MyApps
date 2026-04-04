@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.api.web.cache
+package xyz.torquato.myaps.domain.api.web.cache
 
 data class CacheItem(
     var id: String,

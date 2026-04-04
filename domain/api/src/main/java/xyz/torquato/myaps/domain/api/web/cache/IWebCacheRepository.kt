@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.api.web.cache
+package xyz.torquato.myaps.domain.api.web.cache
 
 import kotlinx.coroutines.flow.StateFlow
 
