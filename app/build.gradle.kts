@@ -74,7 +74,6 @@ dependencies {
     implementation(libs.androidx.games.activity)
     implementation(libs.androidx.navigation)
     implementation(libs.kotlinx.serialization)
-    implementation(libs.room.runtime)
     implementation(libs.glide.compose)
     // TODO remove data di from app
     implementation(project(":data:di"))
@@ -93,6 +92,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    ksp(libs.room.compiler)
+
     ksp(libs.dagger.hilt.compiler)
 }
