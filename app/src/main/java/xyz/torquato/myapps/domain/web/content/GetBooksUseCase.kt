@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.scan
 import org.json.JSONArray
 import org.json.JSONObject
-import xyz.torquato.myapps.api.pagging.IPagingRepository
 import xyz.torquato.myapps.api.web.IQueryRepository
 import xyz.torquato.myapps.api.web.IWebRepository
 import xyz.torquato.myapps.api.web.cache.CacheItem
@@ -18,6 +17,7 @@ import xyz.torquato.myapps.api.web.cache.IWebCacheRepository
 import xyz.torquato.myapps.api.web.model.QueryRequest
 import xyz.torquato.myapps.api.web.model.QueryResult
 import xyz.torquato.myapps.domain.web.content.model.QueryResultCollection
+import xyz.torquato.myaps.domain.api.pagging.IPagingRepository
 
 class GetBooksUseCase(
     private val queryRepository: IQueryRepository,

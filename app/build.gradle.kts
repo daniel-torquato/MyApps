@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "xyz.torquato.myapps"
-        minSdk = 33
+        minSdk = 35
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -78,6 +78,9 @@ dependencies {
     implementation(libs.thirdparty.openssl)
     implementation(libs.thirdparty.curl)
     implementation(libs.glide.compose)
+    // TODO remove data di from app
+    implementation(project(":data:di"))
+    implementation(project(":domain:api"))
     implementation(project(":domain:impl"))
     //implementation(libs.coil.network.okhttp)
 
