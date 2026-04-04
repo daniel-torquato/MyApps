@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import xyz.torquato.myapps.api.sound.ICypherRepository
+import xyz.torquato.myaps.domain.api.encrypt.ICypherRepository
 import xyz.torquato.myapps.ui.component.cypher.model.CypherUiState
 import javax.inject.Inject
 

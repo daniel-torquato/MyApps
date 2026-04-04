@@ -9,7 +9,7 @@
 #include <StringUtil.hpp>
 #include <CypherUtil.hpp>
 
-#define jni_prefix(func) Java ## _xyz_torquato_myapps ## _data_cypher_CypherRepository ## _ ## func
+#define jni_prefix(func) Java ## _xyz_torquato_myapps ## _data_impl ## _cypher_CypherRepository ## _ ## func
 
 extern "C"
 JNIEXPORT jstring JNICALL

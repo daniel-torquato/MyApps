@@ -11,7 +11,7 @@
 #include <CypherUtil.hpp>
 
 
-#define jni_prefix(func) Java ## _xyz_torquato_myapps ## _CypherTester ## _ ## func
+#define jni_prefix(func) Java ## _xyz_torquato_myapps ## _data_impl ## _CypherTester ## _ ## func
 
 extern "C"
 JNIEXPORT jstring JNICALL

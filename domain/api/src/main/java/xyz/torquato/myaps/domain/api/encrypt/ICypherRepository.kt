@@ -1,6 +1,5 @@
-package xyz.torquato.myapps.api.sound
+package xyz.torquato.myaps.domain.api.encrypt
 
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface ICypherRepository {
