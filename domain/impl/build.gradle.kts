@@ -13,5 +13,6 @@ kotlin {
 }
 
 dependencies {
+    implementation(libs.corountines.core)
     implementation(project(":domain:api"))
 }
