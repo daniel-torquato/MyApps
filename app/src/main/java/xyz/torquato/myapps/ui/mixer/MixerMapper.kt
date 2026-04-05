@@ -3,7 +3,7 @@ package xyz.torquato.myapps.ui.mixer
 import xyz.torquato.myapps.ui.mixer.model.InputTouch
 import xyz.torquato.myapps.ui.mixer.model.Note
 import xyz.torquato.myapps.ui.mixer.model.Track
-import xyz.torquato.myaps.domain.api.sound.model.Tone
+import xyz.torquato.myaps.domain.impl.mixer.model.Tone
 
 fun InputTouch.toTones(): List<Tone> = touchList.map { point ->
     val freqRange = (scale.endInclusive - scale.start)

@@ -7,16 +7,20 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import xyz.torquato.myaps.domain.api.encrypt.ICypherRepository
 import xyz.torquato.myapps.ui.component.cypher.model.CypherUiState
+import xyz.torquato.myaps.domain.impl.cypher.GetAuthenticationUseCase
+import xyz.torquato.myaps.domain.impl.cypher.SetMessageUseCase
+import xyz.torquato.myaps.domain.impl.cypher.SetTokenUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class CypherViewModel @Inject constructor(
-    private val repository: ICypherRepository
+    private val getAuthenticationUseCase: GetAuthenticationUseCase,
+    private val setTokenUseCase: SetTokenUseCase,
+    private val setMessageUseCase: SetMessageUseCase
 ) : ViewModel() {
 
-    val uiState: StateFlow<CypherUiState> = repository.message.map {
+    val uiState: StateFlow<CypherUiState> = getAuthenticationUseCase().map {
         CypherUiState(it)
     }.stateIn(
         scope = viewModelScope,
@@ -25,11 +29,11 @@ class CypherViewModel @Inject constructor(
     )
 
     fun changeToken(newToken: String) {
-        repository.setToken(newToken)
+        setTokenUseCase(newToken)
     }
 
     fun changeMessage(newMessage: String) {
-        repository.setMessage(newMessage)
+        setMessageUseCase(newMessage)
     }
 
 

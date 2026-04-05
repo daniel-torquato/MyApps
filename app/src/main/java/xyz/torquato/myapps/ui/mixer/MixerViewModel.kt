@@ -7,47 +7,55 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import xyz.torquato.myapps.ui.mixer.model.Note
 import xyz.torquato.myapps.ui.mixer.model.Track
-import xyz.torquato.myaps.domain.api.sound.ISoundRepository
-import xyz.torquato.myaps.domain.api.sound.model.Tone
+import xyz.torquato.myaps.domain.impl.mixer.CleanUpUseCase
+import xyz.torquato.myaps.domain.impl.mixer.PerformControlUseCase
+import xyz.torquato.myaps.domain.impl.mixer.SetToneUseCase
+import xyz.torquato.myaps.domain.impl.mixer.SetTonesUseCase
+import xyz.torquato.myaps.domain.impl.mixer.model.Tone
 import javax.inject.Inject
+import kotlin.collections.first
+import kotlin.collections.isNotEmpty
 
 @HiltViewModel
 class MixerViewModel @Inject constructor(
-    private val soundRepository: ISoundRepository
+    private val setToneUseCase: SetToneUseCase,
+    private val setTonesUseCase: SetTonesUseCase,
+    private val performControlUseCase: PerformControlUseCase,
+    private val cleanUpUseCase: CleanUpUseCase
 ) : ViewModel() {
 
     fun add(frequency: Float, amplitude: Float) {
-        soundRepository.setTone(frequency, amplitude)
+        setToneUseCase(frequency, amplitude)
     }
 
     fun play(track: Track) {
         val tone = track.notes.first().tones.first()
         viewModelScope.launch {
-            soundRepository.setTone(tone.frequency, tone.amplitude)
+            setToneUseCase(tone.frequency, tone.amplitude)
         }
     }
 
     suspend fun play(note: Note) {
         if (note.tones.isNotEmpty()) {
             println("MyTag: play $note")
-            soundRepository.setTones(note.tones.toTypedArray())
-            soundRepository.performControl(true)
+            setTonesUseCase(note.tones.toTypedArray())
+            performControlUseCase(true)
             delay(note.duration)
-            soundRepository.performControl(false)
+            performControlUseCase(false)
         }
     }
 
     fun play(tones: List<Tone>) {
         if (tones.isNotEmpty()) {
-            soundRepository.setTones(tones.toTypedArray())
-            soundRepository.performControl(true)
+            setTonesUseCase(tones.toTypedArray())
+            performControlUseCase(true)
         } else {
-            soundRepository.performControl(false)
+            performControlUseCase(false)
         }
     }
 
     fun reset() {
-        soundRepository.performControl(false)
-        soundRepository.clear()
+        performControlUseCase(false)
+        cleanUpUseCase()
     }
 }

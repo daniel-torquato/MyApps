@@ -13,9 +13,10 @@ import xyz.torquato.myaps.domain.api.web.IQueryRepository
 import xyz.torquato.myaps.domain.api.web.IWebRepository
 import xyz.torquato.myaps.domain.api.web.cache.CacheItem
 import xyz.torquato.myaps.domain.api.web.cache.IWebCacheRepository
-import xyz.torquato.myaps.domain.api.web.model.BookItem
 import xyz.torquato.myaps.domain.api.web.model.QueryRequest
 import xyz.torquato.myaps.domain.api.web.model.QueryResult
+import xyz.torquato.myaps.domain.impl.web.content.model.BookItem
+import xyz.torquato.myaps.domain.api.web.model.BookItem as DataBookItem
 import xyz.torquato.myaps.domain.impl.web.content.model.QueryResultCollection
 
 class GetBooksUseCase(
@@ -97,11 +98,22 @@ class GetBooksUseCase(
 
     private fun QueryResult.toData(): List<BookItem> {
         return when(this) {
-            is QueryResult.Valid -> { data }
+            is QueryResult.Valid -> { data.map { it.toDomain() } }
             else -> {
                 emptyList()
             }
         }
     }
+
+    private fun DataBookItem.toDomain(): BookItem = BookItem(
+        id = id,
+        title = title,
+        author = author,
+        description = description,
+        smallThumbnailUrl = smallThumbnailUrl,
+        largeThumbnailUrl = largeThumbnailUrl,
+        buyLink = buyLink
+    )
+
 
 }
