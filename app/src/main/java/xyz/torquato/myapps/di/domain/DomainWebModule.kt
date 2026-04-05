@@ -5,7 +5,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import xyz.torquato.myapps.domain.web.content.GetBooksUseCase
-import xyz.torquato.myapps.domain.web.content.GetCacheBooksUseCase
 import xyz.torquato.myaps.domain.api.pagging.IPagingRepository
 import xyz.torquato.myaps.domain.api.web.IQueryRepository
 import xyz.torquato.myaps.domain.api.web.IWebRepository
@@ -29,16 +28,5 @@ object DomainWebModule {
         pagingRepository,
         webCacheRepository
     )
-
-    @Singleton
-    @Provides
-    fun provideGetCacheBooksUseCase(
-        webCacheRepository: IWebCacheRepository
-    ): GetCacheBooksUseCase = GetCacheBooksUseCase(
-        webCacheRepository
-    )
-
-
-
 
 }
