@@ -5,7 +5,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import xyz.torquato.myapps.domain.web.GetSelectedBookUseCase
-import xyz.torquato.myapps.domain.web.SetSelectedBookUseCase
 import xyz.torquato.myapps.domain.web.content.GetBooksUseCase
 import xyz.torquato.myapps.domain.web.content.GetCacheBooksUseCase
 import xyz.torquato.myapps.domain.web.pagging.GetNextPageUseCase
@@ -50,13 +49,7 @@ object DomainWebModule {
         repository
     )
 
-    @Singleton
-    @Provides
-    fun provideSetSelectedBookIdUseCase(
-        repository: ILocalWebRepository
-    ): SetSelectedBookUseCase = SetSelectedBookUseCase(
-        repository
-    )
+
 
     @Singleton
     @Provides
