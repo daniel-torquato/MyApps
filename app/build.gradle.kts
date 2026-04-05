@@ -79,6 +79,7 @@ dependencies {
     implementation(project(":data:di"))
     implementation(project(":domain:api"))
     implementation(project(":domain:impl"))
+    implementation(project(":domain:di"))
     //implementation(libs.coil.network.okhttp)
 
     testImplementation(libs.junit)
