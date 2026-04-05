@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import xyz.torquato.myapps.domain.web.GetSelectedBookUseCase
 import xyz.torquato.myapps.domain.web.content.GetCacheBooksUseCase
 import xyz.torquato.myapps.ui.component.web.model.BookMenuMapper.toUiState
 import xyz.torquato.myapps.ui.component.web.model.BookMenuUiState
+import xyz.torquato.myaps.domain.impl.web.GetSelectedBookUseCase
 import javax.inject.Inject
 
 @HiltViewModel

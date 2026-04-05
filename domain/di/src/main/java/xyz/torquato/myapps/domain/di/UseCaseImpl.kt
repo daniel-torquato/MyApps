@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import xyz.torquato.myaps.domain.api.pagging.IPagingRepository
 import xyz.torquato.myaps.domain.api.web.ILocalWebRepository
 import xyz.torquato.myaps.domain.api.web.IQueryRepository
+import xyz.torquato.myaps.domain.impl.web.GetSelectedBookUseCase
 import xyz.torquato.myaps.domain.impl.web.SetQueryUseCase
 import xyz.torquato.myaps.domain.impl.web.content.SetSelectedBookUseCase
 import xyz.torquato.myaps.domain.impl.web.paging.GetNextPageUseCase
@@ -40,5 +41,13 @@ object UseCaseImpl {
         queryRepository: IQueryRepository,
     ): SetQueryUseCase = SetQueryUseCase(
         queryRepository
+    )
+
+    @Singleton
+    @Provides
+    fun provideGetSelectedBookIdUseCase(
+        repository: ILocalWebRepository
+    ): GetSelectedBookUseCase = GetSelectedBookUseCase(
+        repository
     )
 }
