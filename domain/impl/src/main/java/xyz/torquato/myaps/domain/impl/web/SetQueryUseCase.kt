@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.domain.web
+package xyz.torquato.myaps.domain.impl.web
 
 import xyz.torquato.myaps.domain.api.web.IQueryRepository
 
