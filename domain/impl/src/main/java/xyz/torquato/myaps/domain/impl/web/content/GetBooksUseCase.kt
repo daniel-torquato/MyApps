@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.domain.web.content
+package xyz.torquato.myaps.domain.impl.web.content
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -8,15 +8,15 @@ import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.scan
-import xyz.torquato.myaps.domain.api.web.cache.CacheItem
-import xyz.torquato.myapps.domain.web.content.model.QueryResultCollection
 import xyz.torquato.myaps.domain.api.pagging.IPagingRepository
 import xyz.torquato.myaps.domain.api.web.IQueryRepository
 import xyz.torquato.myaps.domain.api.web.IWebRepository
+import xyz.torquato.myaps.domain.api.web.cache.CacheItem
 import xyz.torquato.myaps.domain.api.web.cache.IWebCacheRepository
 import xyz.torquato.myaps.domain.api.web.model.BookItem
 import xyz.torquato.myaps.domain.api.web.model.QueryRequest
 import xyz.torquato.myaps.domain.api.web.model.QueryResult
+import xyz.torquato.myaps.domain.impl.web.content.model.QueryResultCollection
 
 class GetBooksUseCase(
     private val queryRepository: IQueryRepository,

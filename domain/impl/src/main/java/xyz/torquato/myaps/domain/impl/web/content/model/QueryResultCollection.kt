@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.domain.web.content.model
+package xyz.torquato.myaps.domain.impl.web.content.model
 
 import xyz.torquato.myaps.domain.api.web.model.QueryResult
 
