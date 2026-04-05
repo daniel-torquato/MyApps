@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import xyz.torquato.myaps.domain.api.web.cache.CacheItem
 import xyz.torquato.myaps.domain.api.web.cache.IWebCacheRepository
-import xyz.torquato.myaps.domain.api.web.model.BookItem
+import xyz.torquato.myaps.domain.impl.web.content.model.BookItem
 
 class GetCacheBooksUseCase(
     val webCacheRepository: IWebCacheRepository

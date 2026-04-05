@@ -8,14 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
-import xyz.torquato.myaps.domain.api.sound.ISoundRepository
+import xyz.torquato.myaps.domain.impl.mixer.SetChannelStateUseCase
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MusicActivity : ComponentActivity() {
 
     @Inject
-    lateinit var soundRepository: ISoundRepository
+    lateinit var setChannelStateUseCase: SetChannelStateUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,11 +35,11 @@ class MusicActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-        soundRepository.start()
+        setChannelStateUseCase(true)
     }
 
     override fun onDestroy() {
-        soundRepository.destroy()
+        setChannelStateUseCase(false)
         super.onDestroy()
     }
 }

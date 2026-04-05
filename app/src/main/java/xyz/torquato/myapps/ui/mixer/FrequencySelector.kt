@@ -48,7 +48,7 @@ import xyz.torquato.myapps.ui.components.model.MyIcons
 import xyz.torquato.myapps.ui.mixer.model.MixerUiState
 import xyz.torquato.myapps.ui.mixer.model.Note
 import xyz.torquato.myapps.ui.mixer.model.Track
-import xyz.torquato.myaps.domain.api.sound.model.Tone
+import xyz.torquato.myaps.domain.impl.mixer.model.Tone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("ReturnFromAwaitPointerEventScope")

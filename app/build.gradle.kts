@@ -76,8 +76,6 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.glide.compose)
     // TODO remove data di from app
-    implementation(project(":data:di"))
-    implementation(project(":domain:api"))
     implementation(project(":domain:impl"))
     implementation(project(":domain:di"))
     //implementation(libs.coil.network.okhttp)
