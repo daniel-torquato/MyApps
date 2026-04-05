@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.domain.web.pagging
+package xyz.torquato.myaps.domain.impl.web.paging
 
 import xyz.torquato.myaps.domain.api.pagging.IPagingRepository
 import xyz.torquato.myaps.domain.api.web.IQueryRepository
