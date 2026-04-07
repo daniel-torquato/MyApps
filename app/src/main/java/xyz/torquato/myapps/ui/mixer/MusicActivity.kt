@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
-import xyz.torquato.myaps.domain.impl.mixer.SetChannelStateUseCase
+import xyz.torquato.myapps.domain.impl.mixer.SetChannelStateUseCase
 import javax.inject.Inject
 
 @AndroidEntryPoint

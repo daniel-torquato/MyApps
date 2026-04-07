@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import xyz.torquato.myapps.ui.component.cypher.model.CypherUiState
-import xyz.torquato.myaps.domain.impl.cypher.GetAuthenticationUseCase
-import xyz.torquato.myaps.domain.impl.cypher.SetMessageUseCase
-import xyz.torquato.myaps.domain.impl.cypher.SetTokenUseCase
+import xyz.torquato.myapps.domain.impl.cypher.GetAuthenticationUseCase
+import xyz.torquato.myapps.domain.impl.cypher.SetMessageUseCase
+import xyz.torquato.myapps.domain.impl.cypher.SetTokenUseCase
 import javax.inject.Inject
 
 @HiltViewModel

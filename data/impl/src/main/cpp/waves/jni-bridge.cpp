@@ -29,7 +29,7 @@ jni_prefix(setTones)(JNIEnv *env, jobject _this,  jobjectArray tones) {
 
     if (length >= 0) {
         audioEngine->allocate(length);
-        jclass toneClass = env->FindClass( "xyz/torquato/myaps/domain/api/sound/model/Tone");
+        jclass toneClass = env->FindClass( "xyz/torquato/myapps/domain/api/sound/model/Tone");
         jfieldID freqId = env->GetFieldID(toneClass, "frequency", "F");
         jfieldID amplId = env->GetFieldID(toneClass, "amplitude", "F");
 

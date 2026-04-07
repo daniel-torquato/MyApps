@@ -7,11 +7,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import xyz.torquato.myapps.ui.mixer.model.Note
 import xyz.torquato.myapps.ui.mixer.model.Track
-import xyz.torquato.myaps.domain.impl.mixer.CleanUpUseCase
-import xyz.torquato.myaps.domain.impl.mixer.PerformControlUseCase
-import xyz.torquato.myaps.domain.impl.mixer.SetToneUseCase
-import xyz.torquato.myaps.domain.impl.mixer.SetTonesUseCase
-import xyz.torquato.myaps.domain.impl.mixer.model.Tone
+import xyz.torquato.myapps.domain.impl.mixer.CleanUpUseCase
+import xyz.torquato.myapps.domain.impl.mixer.PerformControlUseCase
+import xyz.torquato.myapps.domain.impl.mixer.SetToneUseCase
+import xyz.torquato.myapps.domain.impl.mixer.SetTonesUseCase
+import xyz.torquato.myapps.domain.impl.mixer.model.Tone
 import javax.inject.Inject
 import kotlin.collections.first
 import kotlin.collections.isNotEmpty

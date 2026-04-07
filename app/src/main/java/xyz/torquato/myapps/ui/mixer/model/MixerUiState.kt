@@ -1,6 +1,6 @@
 package xyz.torquato.myapps.ui.mixer.model
 
-import xyz.torquato.myaps.domain.impl.mixer.model.Tone
+import xyz.torquato.myapps.domain.impl.mixer.model.Tone
 
 
 data class MixerUiState(
