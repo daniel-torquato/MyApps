@@ -5,11 +5,11 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import xyz.torquato.myaps.domain.api.web.IWebRepository
-import xyz.torquato.myaps.domain.api.web.model.BookError
-import xyz.torquato.myaps.domain.api.web.model.BookItem
-import xyz.torquato.myaps.domain.api.web.model.QueryRequest
-import xyz.torquato.myaps.domain.api.web.model.QueryResult
+import xyz.torquato.myapps.domain.api.web.IWebRepository
+import xyz.torquato.myapps.domain.api.web.model.BookError
+import xyz.torquato.myapps.domain.api.web.model.BookItem
+import xyz.torquato.myapps.domain.api.web.model.QueryRequest
+import xyz.torquato.myapps.domain.api.web.model.QueryResult
 import javax.inject.Inject
 import javax.inject.Singleton
 

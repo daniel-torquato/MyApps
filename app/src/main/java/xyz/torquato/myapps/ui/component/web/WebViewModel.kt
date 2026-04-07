@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import xyz.torquato.myapps.ui.component.web.model.BookMenuMapper.toUiState
 import xyz.torquato.myapps.ui.component.web.model.BookMenuUiState
-import xyz.torquato.myaps.domain.impl.web.SetQueryUseCase
-import xyz.torquato.myaps.domain.impl.web.content.GetBooksUseCase
-import xyz.torquato.myaps.domain.impl.web.content.SetSelectedBookUseCase
-import xyz.torquato.myaps.domain.impl.web.paging.GetNextPageUseCase
+import xyz.torquato.myapps.domain.impl.web.SetQueryUseCase
+import xyz.torquato.myapps.domain.impl.web.content.GetBooksUseCase
+import xyz.torquato.myapps.domain.impl.web.content.SetSelectedBookUseCase
+import xyz.torquato.myapps.domain.impl.web.paging.GetNextPageUseCase
 import javax.inject.Inject
 
 @HiltViewModel

@@ -2,7 +2,7 @@ package xyz.torquato.myapps.data.impl.web.cache
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import xyz.torquato.myaps.domain.api.web.cache.CacheItem
+import xyz.torquato.myapps.domain.api.web.cache.CacheItem
 import javax.inject.Inject
 
 class WebCacheDataSource @Inject constructor() {

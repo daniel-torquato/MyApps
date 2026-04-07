@@ -11,13 +11,13 @@ import xyz.torquato.myapps.data.impl.web.LocalWebRepository
 import xyz.torquato.myapps.data.impl.web.QueryRepository
 import xyz.torquato.myapps.data.impl.web.WebRepository
 import xyz.torquato.myapps.data.impl.web.cache.WebCacheRepository
-import xyz.torquato.myaps.domain.api.encrypt.ICypherRepository
-import xyz.torquato.myaps.domain.api.pagging.IPagingRepository
-import xyz.torquato.myaps.domain.api.sound.ISoundRepository
-import xyz.torquato.myaps.domain.api.web.ILocalWebRepository
-import xyz.torquato.myaps.domain.api.web.IQueryRepository
-import xyz.torquato.myaps.domain.api.web.IWebRepository
-import xyz.torquato.myaps.domain.api.web.cache.IWebCacheRepository
+import xyz.torquato.myapps.domain.api.encrypt.ICypherRepository
+import xyz.torquato.myapps.domain.api.pagging.IPagingRepository
+import xyz.torquato.myapps.domain.api.sound.ISoundRepository
+import xyz.torquato.myapps.domain.api.web.ILocalWebRepository
+import xyz.torquato.myapps.domain.api.web.IQueryRepository
+import xyz.torquato.myapps.domain.api.web.IWebRepository
+import xyz.torquato.myapps.domain.api.web.cache.IWebCacheRepository
 import javax.inject.Singleton
 
 @Module

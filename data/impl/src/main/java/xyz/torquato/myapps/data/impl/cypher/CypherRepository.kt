@@ -2,7 +2,7 @@ package xyz.torquato.myapps.data.impl.cypher
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import xyz.torquato.myaps.domain.api.encrypt.ICypherRepository
+import xyz.torquato.myapps.domain.api.encrypt.ICypherRepository
 import javax.inject.Inject
 
 class CypherRepository @Inject constructor() : ICypherRepository {
