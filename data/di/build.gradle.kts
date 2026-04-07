@@ -43,6 +43,5 @@ dependencies {
     implementation(project(":data:impl"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     ksp(libs.dagger.hilt.compiler)
 }
