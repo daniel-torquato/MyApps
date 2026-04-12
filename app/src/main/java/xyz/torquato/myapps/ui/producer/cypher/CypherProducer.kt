@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import xyz.torquato.myapps.ui.component.cypher.model.CypherUiState
+import xyz.torquato.myapps.presentation.viewmodel.model.CypherUiState
 
 
 @Composable

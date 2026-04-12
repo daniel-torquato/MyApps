@@ -78,6 +78,7 @@ dependencies {
     // TODO remove data di from app
     implementation(project(":domain:impl"))
     implementation(project(":domain:di"))
+    implementation(project(":presentation:viewmodel"))
     //implementation(libs.coil.network.okhttp)
 
     testImplementation(libs.junit)

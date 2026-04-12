@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.ui.component.cypher
+package xyz.torquato.myapps.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,15 +7,15 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import xyz.torquato.myapps.ui.component.cypher.model.CypherUiState
 import xyz.torquato.myapps.domain.impl.cypher.GetAuthenticationUseCase
 import xyz.torquato.myapps.domain.impl.cypher.SetMessageUseCase
 import xyz.torquato.myapps.domain.impl.cypher.SetTokenUseCase
+import xyz.torquato.myapps.presentation.viewmodel.model.CypherUiState
 import javax.inject.Inject
 
 @HiltViewModel
 class CypherViewModel @Inject constructor(
-    private val getAuthenticationUseCase: GetAuthenticationUseCase,
+    getAuthenticationUseCase: GetAuthenticationUseCase,
     private val setTokenUseCase: SetTokenUseCase,
     private val setMessageUseCase: SetMessageUseCase
 ) : ViewModel() {
@@ -35,6 +35,5 @@ class CypherViewModel @Inject constructor(
     fun changeMessage(newMessage: String) {
         setMessageUseCase(newMessage)
     }
-
 
 }
