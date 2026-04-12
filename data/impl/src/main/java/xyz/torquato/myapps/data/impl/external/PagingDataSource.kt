@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-class PagingDataSource @Inject constructor() {
+open class PagingDataSource @Inject constructor() {
 
     private val pages = mutableMapOf<String, MutableStateFlow<IntRange>>()
 
-    fun addPager(id: String) {
+    open fun addPager(id: String) {
         println("MyTag: [DS] ADD PAGER $id")
         pages[id] = MutableStateFlow(0 until  DEFAULT_COUNT)
     }

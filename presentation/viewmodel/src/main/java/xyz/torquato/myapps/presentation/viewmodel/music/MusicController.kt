@@ -1,6 +1,7 @@
 package xyz.torquato.myapps.presentation.viewmodel.music
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import xyz.torquato.myapps.domain.impl.mixer.SetChannelStateUseCase
 import javax.inject.Inject
 

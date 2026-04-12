@@ -41,7 +41,7 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     implementation(project(":domain:api"))
     implementation(project(":domain:impl"))
-    implementation(project(":data:di"))
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
