@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import xyz.torquato.myapps.presentation.viewmodel.CypherViewModel
 import xyz.torquato.myapps.ui.producer.cypher.CypherProducer
 
 
@@ -14,7 +15,7 @@ fun CypherComponent(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     CypherProducer(
-        uiState,
+        uiState = uiState,
         onChangeToken = viewModel::changeToken,
         onChangeMessage = viewModel::changeMessage
     )

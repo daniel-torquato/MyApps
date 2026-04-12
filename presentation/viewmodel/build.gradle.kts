@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.kotlin.symbol.processor)
 }
 
 android {
@@ -36,7 +38,12 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.hilt.viewmodel.compose)
+    implementation(project(":domain:impl"))
+    implementation(project(":domain:di"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    ksp(libs.dagger.hilt.compiler)
 }
