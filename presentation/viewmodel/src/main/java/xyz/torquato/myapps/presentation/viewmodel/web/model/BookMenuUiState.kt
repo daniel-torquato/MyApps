@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.ui.component.web.model
+package xyz.torquato.myapps.presentation.viewmodel.web.model
 
 data class BookMenuUiState(
     val content: List<BookItem>
