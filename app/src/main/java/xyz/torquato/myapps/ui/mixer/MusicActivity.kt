@@ -7,15 +7,15 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
+import xyz.torquato.myapps.presentation.viewmodel.music.MusicController
 import xyz.torquato.myapps.ui.theme.MyAppsTheme
-import xyz.torquato.myapps.domain.impl.mixer.SetChannelStateUseCase
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MusicActivity : ComponentActivity() {
 
     @Inject
-    lateinit var setChannelStateUseCase: SetChannelStateUseCase
+    lateinit var controller: MusicController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,11 +35,11 @@ class MusicActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-        setChannelStateUseCase(true)
+        controller.enabledChannel(true)
     }
 
     override fun onDestroy() {
-        setChannelStateUseCase(false)
+        controller.enabledChannel(false)
         super.onDestroy()
     }
 }
