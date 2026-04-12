@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.ui.component.web.model
+package xyz.torquato.myapps.presentation.viewmodel.web.model
 
 import xyz.torquato.myapps.domain.impl.web.content.model.BookItem
 

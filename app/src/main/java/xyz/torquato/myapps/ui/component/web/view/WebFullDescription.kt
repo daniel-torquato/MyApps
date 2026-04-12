@@ -16,8 +16,8 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import xyz.torquato.myapps.R
-import xyz.torquato.myapps.ui.component.web.WebFullDescriptionViewModel
-import xyz.torquato.myapps.ui.component.web.model.BookMenuUiState
+import xyz.torquato.myapps.presentation.viewmodel.web.WebFullDescriptionViewModel
+import xyz.torquato.myapps.presentation.viewmodel.web.model.BookMenuUiState
 
 object WebFullDescription {
 
@@ -33,7 +33,7 @@ object WebFullDescription {
     ) {
         val uiState by viewModel.uiState.collectAsState()
 
-        Producer(uiState,{ _ ->})
+        Producer(uiState) { }
     }
 
     @OptIn(ExperimentalGlideComposeApi::class)

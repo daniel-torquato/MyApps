@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.ui.component.web
+package xyz.torquato.myapps.presentation.viewmodel.web
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import xyz.torquato.myapps.ui.component.web.model.BookMenuMapper.toUiState
-import xyz.torquato.myapps.ui.component.web.model.BookMenuUiState
 import xyz.torquato.myapps.domain.impl.web.SetQueryUseCase
 import xyz.torquato.myapps.domain.impl.web.content.GetBooksUseCase
 import xyz.torquato.myapps.domain.impl.web.content.SetSelectedBookUseCase
 import xyz.torquato.myapps.domain.impl.web.paging.GetNextPageUseCase
+import xyz.torquato.myapps.presentation.viewmodel.web.model.BookMenuMapper.toUiState
+import xyz.torquato.myapps.presentation.viewmodel.web.model.BookMenuUiState
 import javax.inject.Inject
 
 @HiltViewModel

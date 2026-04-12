@@ -48,8 +48,8 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import xyz.torquato.myapps.R
-import xyz.torquato.myapps.ui.component.web.WebViewModel
-import xyz.torquato.myapps.ui.component.web.model.BookMenuUiState
+import xyz.torquato.myapps.presentation.viewmodel.web.WebViewModel
+import xyz.torquato.myapps.presentation.viewmodel.web.model.BookMenuUiState
 import xyz.torquato.myapps.ui.component.web.navigation.host.WebNavigator
 import xyz.torquato.myapps.ui.component.web.navigation.host.WebRoute
 import xyz.torquato.myapps.ui.component.web.view.WebPrev.Provider
