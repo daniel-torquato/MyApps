@@ -75,9 +75,6 @@ dependencies {
     implementation(libs.androidx.navigation)
     implementation(libs.kotlinx.serialization)
     implementation(libs.glide.compose)
-    // TODO remove data di from app
-    implementation(project(":domain:impl"))
-    implementation(project(":domain:di"))
     implementation(project(":presentation:viewmodel"))
     //implementation(libs.coil.network.okhttp)
 

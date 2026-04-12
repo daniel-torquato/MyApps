@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.ui.mixer.model
+package xyz.torquato.myapps.presentation.viewmodel.mixer.model
 
 data class Track(
     val start: Long,

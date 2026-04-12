@@ -29,7 +29,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import org.intellij.lang.annotations.Language
-import xyz.torquato.myapps.ui.mixer.model.InputTouch
+import xyz.torquato.myapps.presentation.viewmodel.mixer.model.InputTouch
 
 
 @Language("AGSL")

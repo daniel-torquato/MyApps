@@ -1,6 +1,4 @@
-package xyz.torquato.myapps.ui.mixer.model
-
-import xyz.torquato.myapps.domain.impl.mixer.model.Tone
+package xyz.torquato.myapps.presentation.viewmodel.mixer.model
 
 data class Note(
     val tones: List<Tone>,

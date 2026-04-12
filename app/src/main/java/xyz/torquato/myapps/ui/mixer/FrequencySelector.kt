@@ -39,16 +39,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import xyz.torquato.myapps.presentation.viewmodel.mixer.MixerViewModel
+import xyz.torquato.myapps.presentation.viewmodel.mixer.model.MixerUiState
+import xyz.torquato.myapps.presentation.viewmodel.mixer.model.Note
+import xyz.torquato.myapps.presentation.viewmodel.mixer.model.Tone
+import xyz.torquato.myapps.presentation.viewmodel.mixer.model.Track
+import xyz.torquato.myapps.presentation.viewmodel.mixer.toTones
 import xyz.torquato.myapps.ui.components.AddButton
 import xyz.torquato.myapps.ui.components.ElementButton
 import xyz.torquato.myapps.ui.components.MusicalKeyboard
 import xyz.torquato.myapps.ui.components.RangeSelector
 import xyz.torquato.myapps.ui.components.ScaleButton
 import xyz.torquato.myapps.ui.components.model.MyIcons
-import xyz.torquato.myapps.ui.mixer.model.MixerUiState
-import xyz.torquato.myapps.ui.mixer.model.Note
-import xyz.torquato.myapps.ui.mixer.model.Track
-import xyz.torquato.myapps.domain.impl.mixer.model.Tone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("ReturnFromAwaitPointerEventScope")

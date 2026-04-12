@@ -1,7 +1,6 @@
-package xyz.torquato.myapps.ui.mixer.model
+package xyz.torquato.myapps.presentation.viewmodel.mixer.model
 
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.IntSize
 
 data class InputTouch (

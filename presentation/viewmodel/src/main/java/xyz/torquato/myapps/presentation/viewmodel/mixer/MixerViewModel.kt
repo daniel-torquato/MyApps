@@ -1,17 +1,17 @@
-package xyz.torquato.myapps.ui.mixer
+package xyz.torquato.myapps.presentation.viewmodel.mixer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import xyz.torquato.myapps.ui.mixer.model.Note
-import xyz.torquato.myapps.ui.mixer.model.Track
 import xyz.torquato.myapps.domain.impl.mixer.CleanUpUseCase
 import xyz.torquato.myapps.domain.impl.mixer.PerformControlUseCase
 import xyz.torquato.myapps.domain.impl.mixer.SetToneUseCase
 import xyz.torquato.myapps.domain.impl.mixer.SetTonesUseCase
-import xyz.torquato.myapps.domain.impl.mixer.model.Tone
+import xyz.torquato.myapps.presentation.viewmodel.mixer.model.Note
+import xyz.torquato.myapps.presentation.viewmodel.mixer.model.Tone
+import xyz.torquato.myapps.presentation.viewmodel.mixer.model.Track
 import javax.inject.Inject
 import kotlin.collections.first
 import kotlin.collections.isNotEmpty
@@ -38,7 +38,7 @@ class MixerViewModel @Inject constructor(
     suspend fun play(note: Note) {
         if (note.tones.isNotEmpty()) {
             println("MyTag: play $note")
-            setTonesUseCase(note.tones.toTypedArray())
+            setTonesUseCase(note.tones.toDomain().toTypedArray())
             performControlUseCase(true)
             delay(note.duration)
             performControlUseCase(false)
@@ -47,7 +47,7 @@ class MixerViewModel @Inject constructor(
 
     fun play(tones: List<Tone>) {
         if (tones.isNotEmpty()) {
-            setTonesUseCase(tones.toTypedArray())
+            setTonesUseCase(tones.toDomain().toTypedArray())
             performControlUseCase(true)
         } else {
             performControlUseCase(false)
