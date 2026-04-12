@@ -82,6 +82,8 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.glide.compose)
     implementation(project(":presentation:viewmodel"))
+    implementation(project(":domain:di"))
+    implementation(project(":data:di"))
     //implementation(libs.coil.network.okhttp)
 
     testImplementation(libs.junit)

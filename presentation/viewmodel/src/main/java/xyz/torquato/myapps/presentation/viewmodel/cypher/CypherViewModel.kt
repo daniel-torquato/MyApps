@@ -1,4 +1,4 @@
-package xyz.torquato.myapps.presentation.viewmodel
+package xyz.torquato.myapps.presentation.viewmodel.cypher
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

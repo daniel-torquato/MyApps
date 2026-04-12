@@ -15,6 +15,7 @@ import xyz.torquato.myapps.domain.impl.web.paging.GetNextPageUseCase
 import xyz.torquato.myapps.presentation.viewmodel.web.model.BookMenuMapper.toUiState
 import xyz.torquato.myapps.presentation.viewmodel.web.model.BookMenuUiState
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @HiltViewModel
 class WebViewModel @Inject constructor(
