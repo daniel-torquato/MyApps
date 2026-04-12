@@ -26,6 +26,9 @@ jetbrainsKotlinJvm = "2.0.20"
 coroutines-core ="1.10.2"
 espressoCore = "3.7.0"
 benchmarkMacroJunit4 = "1.4.1"
+benchmark = "1.2.4"
+runner = "1.7.0"
+benchmarkJunit4 = "1.4.1"
 
 
 [libraries]
@@ -64,6 +67,8 @@ glide-compose = { group = "com.github.bumptech.glide", name = "compose", version
 corountines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines-core"}
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmarkMacroJunit4" }
+androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
+androidx-benchmark-junit4 = { group = "androidx.benchmark", name = "benchmark-junit4", version.ref = "benchmarkJunit4" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -75,4 +80,5 @@ dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hil
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-test = { id = "com.android.test", version.ref = "agp" }
+benchmark = { id = "androidx.benchmark", version.ref = "benchmark" }
 
