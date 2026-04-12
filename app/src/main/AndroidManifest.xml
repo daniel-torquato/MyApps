@@ -4,15 +4,16 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".core.MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".core.MyApp"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApps">
+        <profileable android:shell="true" />
 
         <activity
             android:name=".MenuActivity"
@@ -20,67 +21,33 @@
             android:theme="@style/Theme.MyGames">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="myengine" />
         </activity>
-
         <activity
             android:name=".ui.mixer.MusicActivity"
             android:exported="true"
             android:theme="@style/Theme.MyApps">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.activities.EngineActivity"
             android:exported="true"
             android:theme="@style/Theme.MyGames">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="myengine" />
         </activity>
-
         <activity
             android:name=".ui.activities.CypherActivity"
             android:exported="true"
             android:theme="@style/Theme.MyGames">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <!--meta-data
-                android:name="android.app.lib_name"
-                android:value="myengine" /-->
         </activity>
-
         <activity
             android:name=".ui.activities.WebActivity"
             android:exported="true"
             android:theme="@style/Theme.MyGames">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="web" />
         </activity>
-
-
     </application>
 
 </manifest>
