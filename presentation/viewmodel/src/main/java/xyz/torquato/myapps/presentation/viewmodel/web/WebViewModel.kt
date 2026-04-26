@@ -1,5 +1,6 @@
 package xyz.torquato.myapps.presentation.viewmodel.web
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,15 @@ class WebViewModel @Inject constructor(
     private val setSelectedBookUseCase: SetSelectedBookUseCase,
     private val getNextPageUseCase: GetNextPageUseCase
 ): ViewModel() {
+
+    init {
+        Log.d("MyTag", "[VM] Init ${hashCode()}")
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("MyTag", "[VM] Clean ${hashCode()}")
+    }
 
     val uiState: StateFlow<BookMenuUiState> = getBooksUseCase.invoke().map { items ->
         println("MyTag: New Content ${items}")

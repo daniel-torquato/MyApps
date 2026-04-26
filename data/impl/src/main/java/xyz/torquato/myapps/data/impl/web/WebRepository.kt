@@ -1,5 +1,6 @@
 package xyz.torquato.myapps.data.impl.web
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -52,16 +53,18 @@ class WebRepository @Inject constructor(
         val items = pullArray("items")
         if (items != null) {
             repeat(items.length()) { index ->
-                val element = items.getJSONObject(index)
 
-                val volumeInfo = element.pullObject("volumeInfo")
+                val element = runCatching {  items.getJSONObject(index) }.getOrNull()
+
+                val volumeInfo = element?.pullObject("volumeInfo")
 
                 val imageInfo = volumeInfo?.pullObject("imageLinks")
 
-                val saleInfo = element.pullObject("saleInfo")
+                val saleInfo = element?.pullObject("saleInfo")
+
 
                 val item = BookItem(
-                    id = element.pullString("id"),
+                    id = element.fillString("id"),
                     title = volumeInfo.fillString("title"),
                     author = volumeInfo.fillString("authors"),
                     description = volumeInfo.fillString("description"),
